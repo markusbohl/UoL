@@ -4,3 +4,19 @@
 *.jar
 *.war
 *.ear
+
+# Eclipse #
+.classpath
+.project
+.settings/
+.metadata/
+
+# Maven #
+log/
+target/
+
+# Mac OSX #
+.DS_Store
+
+# Locally stored "Eclipse Launch Configurations" #
+*.launch
