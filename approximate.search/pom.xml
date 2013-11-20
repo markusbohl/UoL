@@ -6,6 +6,11 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>3.0</version>
+		</dependency>
 
 		<!-- test dependencies -->
 		<dependency>
