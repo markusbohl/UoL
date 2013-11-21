@@ -44,8 +44,7 @@ public class CompressedSequenceParserTest {
 		assertEqualEntries(parser.getRawEntries(), expectedSections);
 	}
 
-	@SuppressWarnings("unused")
-	private Object[] parametersForParseRawEntries() {
+	Object[] parametersForParseRawEntries() {
 		return $(
 				$("R(abc)", Arrays.asList(new SequenceSection(RAW, "abc", 0))), //
 				$("R(abc)R(def)", Arrays.asList(new SequenceSection(RAW, "abc", 0), new SequenceSection(RAW, "def", 3))), //
@@ -64,8 +63,7 @@ public class CompressedSequenceParserTest {
 		assertEqualEntries(parser.getRawEntries(), expectedSections);
 	}
 
-	@SuppressWarnings("unused")
-	private Object[] parametersForMindMinLengthWhenParsingRawEntries() {
+	Object[] parametersForMindMinLengthWhenParsingRawEntries() {
 		return $(
 				$(5, Collections.<SequenceSection> emptyList()), //
 				$(4, Arrays.asList(new SequenceSection(RAW, "abcd", 6))), //
