@@ -11,7 +11,7 @@ public class CompressedSequenceParser {
 
 	private final ArrayList<SequenceSection> rawEntries = new ArrayList<>();
 
-	public void parse(final String string) {
+	public void parse(final String string, final int minLength) {
 		int i = 0;
 		int offset = 0;
 		while (i < string.length()) {
@@ -20,7 +20,9 @@ public class CompressedSequenceParser {
 					final int beginIndex = i + 1;
 					final int endIndex = string.indexOf(')', i + 2);
 					final String content = string.substring(beginIndex, endIndex);
-					rawEntries.add(new SequenceSection(RAW, content, offset));
+					if (content.length() >= minLength) {
+						addRawEntry(content, offset);
+					}
 					i = endIndex;
 					offset += content.length();
 				} else {
@@ -33,6 +35,10 @@ public class CompressedSequenceParser {
 				i++;
 			}
 		}
+	}
+
+	private void addRawEntry(final String content, final int offset) {
+		rawEntries.add(new SequenceSection(RAW, content, offset));
 	}
 
 	public List<SequenceSection> getRawEntries() {
