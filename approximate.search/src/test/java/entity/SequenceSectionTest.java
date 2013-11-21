@@ -1,12 +1,17 @@
 package entity;
 
 import static entity.SectionType.RAW;
+import static junitparams.JUnitParamsRunner.$;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(JUnitParamsRunner.class)
 public class SequenceSectionTest {
 
 	private SequenceSection sequenceSection;
@@ -34,5 +39,27 @@ public class SequenceSectionTest {
 	@Test
 	public void getType() throws Exception {
 		assertThat(sequenceSection.getSectionType(), is(RAW));
+	}
+
+	@Test
+	@Parameters
+	public void getFirstNCharacters(final Integer n, final String expectedResult) throws Exception {
+		assertThat(sequenceSection.getFirstNCharacters(n), is(expectedResult));
+	}
+
+	Object parametersForGetFirstNCharacters() {
+		return $($(0, ""), $(1, "c"), $(2, "co"), $(3, "con"), $(4, "cont"), $(5, "conte"), $(6, "conten"),
+				$(7, "content"), $(8, "content"));
+	}
+
+	@Test
+	@Parameters
+	public void getLastNCharacters(final Integer n, final String expectedResult) throws Exception {
+		assertThat(sequenceSection.getLasttNCharacters(n), is(expectedResult));
+	}
+
+	Object parametersForGetLastNCharacters() {
+		return $($(0, ""), $(1, "t"), $(2, "nt"), $(3, "ent"), $(4, "tent"), $(5, "ntent"), $(6, "ontent"),
+				$(7, "content"), $(8, "content"));
 	}
 }

@@ -2,9 +2,9 @@ package entity;
 
 public class SequenceSection {
 
+	private final SectionType sectionType;
 	private final String content;
 	private final int offset;
-	private final SectionType sectionType;
 
 	public SequenceSection(final SectionType type, final String content, final int offset) {
 		this.sectionType = type;
@@ -28,4 +28,17 @@ public class SequenceSection {
 		return sectionType;
 	}
 
+	public String getFirstNCharacters(final int n) {
+		if (n >= getLength()) {
+			return content;
+		}
+		return content.substring(0, n);
+	}
+
+	public String getLasttNCharacters(final int n) {
+		if (n >= getLength()) {
+			return content;
+		}
+		return content.substring(getLength() - n, getLength());
+	}
 }
