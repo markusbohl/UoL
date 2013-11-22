@@ -1,6 +1,5 @@
 package entity;
 
-import static entity.SectionType.RAW;
 import static junitparams.JUnitParamsRunner.$;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -14,11 +13,11 @@ import org.junit.runner.RunWith;
 @RunWith(JUnitParamsRunner.class)
 public class SequenceSectionTest {
 
-	private SequenceSection sequenceSection;
+	private SectionWithOffset sequenceSection;
 
 	@Before
 	public void setUp() throws Exception {
-		sequenceSection = new SequenceSection(RAW, "content", 5);
+		sequenceSection = new SequenceSection("content", 5);
 	}
 
 	@Test
@@ -34,11 +33,6 @@ public class SequenceSectionTest {
 	@Test
 	public void getOffset() throws Exception {
 		assertThat(sequenceSection.getOffset(), is(5));
-	}
-
-	@Test
-	public void getType() throws Exception {
-		assertThat(sequenceSection.getSectionType(), is(RAW));
 	}
 
 	@Test

@@ -1,7 +1,5 @@
 package reader;
 
-import static entity.SectionType.RAW;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class CompressedSequenceParser {
 	}
 
 	private void addRawEntry(final String content, final int offset) {
-		rawEntries.add(new SequenceSection(RAW, content, offset));
+		rawEntries.add(new SequenceSection(content, offset));
 	}
 
 	public List<SequenceSection> getRawEntries() {

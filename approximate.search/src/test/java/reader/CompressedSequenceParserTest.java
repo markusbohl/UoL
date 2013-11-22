@@ -1,6 +1,5 @@
 package reader;
 
-import static entity.SectionType.RAW;
 import static junitparams.JUnitParamsRunner.$;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
@@ -17,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import entity.SectionWithOffset;
 import entity.SequenceSection;
 
 @RunWith(JUnitParamsRunner.class)
@@ -46,12 +46,11 @@ public class CompressedSequenceParserTest {
 
 	Object[] parametersForParseRawEntries() {
 		return $(
-				$("R(abc)", Arrays.asList(new SequenceSection(RAW, "abc", 0))), //
-				$("R(abc)R(def)", Arrays.asList(new SequenceSection(RAW, "abc", 0), new SequenceSection(RAW, "def", 3))), //
-				$("R(abc)RM(2,5)R(def)",
-						Arrays.asList(new SequenceSection(RAW, "abc", 0), new SequenceSection(RAW, "def", 8))), //
+				$("R(abc)", Arrays.asList(new SequenceSection("abc", 0))), //
+				$("R(abc)R(def)", Arrays.asList(new SequenceSection("abc", 0), new SequenceSection("def", 3))), //
+				$("R(abc)RM(2,5)R(def)", Arrays.asList(new SequenceSection("abc", 0), new SequenceSection("def", 8))), //
 				$("RM(2,7)R(abc)RM(15,5)R(def)",
-						Arrays.asList(new SequenceSection(RAW, "abc", 7), new SequenceSection(RAW, "def", 15))) //
+						Arrays.asList(new SequenceSection("abc", 7), new SequenceSection("def", 15))) //
 		);
 	}
 
@@ -63,17 +62,21 @@ public class CompressedSequenceParserTest {
 		assertEqualEntries(parser.getRawEntries(), expectedSections);
 	}
 
+	@Test
+	public void parseRelativeMatchEntries() {
+	}
+
 	Object[] parametersForMindMinLengthWhenParsingRawEntries() {
 		return $(
-				$(5, Collections.<SequenceSection> emptyList()), //
-				$(4, Arrays.asList(new SequenceSection(RAW, "abcd", 6))), //
-				$(3, Arrays.asList(new SequenceSection(RAW, "abc", 3), new SequenceSection(RAW, "abcd", 6))), //
-				$(2, Arrays.asList(new SequenceSection(RAW, "ab", 1), new SequenceSection(RAW, "abc", 3),
-						new SequenceSection(RAW, "abcd", 6))), //
-				$(1, Arrays.asList(new SequenceSection(RAW, "a", 0), new SequenceSection(RAW, "ab", 1),
-						new SequenceSection(RAW, "abc", 3), new SequenceSection(RAW, "abcd", 6))), //
-				$(0, Arrays.asList(new SequenceSection(RAW, "a", 0), new SequenceSection(RAW, "ab", 1),
-						new SequenceSection(RAW, "abc", 3), new SequenceSection(RAW, "abcd", 6))) //
+				$(5, Collections.<SectionWithOffset> emptyList()), //
+				$(4, Arrays.asList(new SequenceSection("abcd", 6))), //
+				$(3, Arrays.asList(new SequenceSection("abc", 3), new SequenceSection("abcd", 6))), //
+				$(2, Arrays.asList(new SequenceSection("ab", 1), new SequenceSection("abc", 3), new SequenceSection(
+						"abcd", 6))), //
+				$(1, Arrays.asList(new SequenceSection("a", 0), new SequenceSection("ab", 1), new SequenceSection(
+						"abc", 3), new SequenceSection("abcd", 6))), //
+				$(0, Arrays.asList(new SequenceSection("a", 0), new SequenceSection("ab", 1), new SequenceSection(
+						"abc", 3), new SequenceSection("abcd", 6))) //
 		);
 	}
 
@@ -86,7 +89,6 @@ public class CompressedSequenceParserTest {
 			final SequenceSection actual = actualSections.get(i);
 			final SequenceSection expected = expectedSections.get(i);
 
-			assertThat(actual.getSectionType(), is(expected.getSectionType()));
 			assertThat(actual.getContent(), is(expected.getContent()));
 			assertThat(actual.getLength(), is(expected.getLength()));
 			assertThat(actual.getOffset(), is(expected.getOffset()));

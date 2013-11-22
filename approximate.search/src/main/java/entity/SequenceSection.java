@@ -1,33 +1,31 @@
 package entity;
 
-public class SequenceSection {
+public class SequenceSection implements SectionWithOffset {
 
-	private final SectionType sectionType;
 	private final String content;
 	private final int offset;
 
-	public SequenceSection(final SectionType type, final String content, final int offset) {
-		this.sectionType = type;
+	public SequenceSection(final String content, final int offset) {
 		this.content = content;
 		this.offset = offset;
 	}
 
+	@Override
 	public String getContent() {
 		return content;
 	}
 
+	@Override
 	public int getLength() {
 		return content.length();
 	}
 
+	@Override
 	public int getOffset() {
 		return offset;
 	}
 
-	public SectionType getSectionType() {
-		return sectionType;
-	}
-
+	@Override
 	public String getFirstNCharacters(final int n) {
 		if (n >= getLength()) {
 			return content;
@@ -35,6 +33,7 @@ public class SequenceSection {
 		return content.substring(0, n);
 	}
 
+	@Override
 	public String getLasttNCharacters(final int n) {
 		if (n >= getLength()) {
 			return content;
