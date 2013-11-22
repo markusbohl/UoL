@@ -2,12 +2,12 @@ package entity;
 
 public class SequenceSection implements SectionWithOffset {
 
-	private final String content;
 	private final int offset;
+	private final String content;
 
-	public SequenceSection(final String content, final int offset) {
-		this.content = content;
+	public SequenceSection(final int offset, final String content) {
 		this.offset = offset;
+		this.content = content;
 	}
 
 	@Override

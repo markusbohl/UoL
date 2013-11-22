@@ -21,12 +21,12 @@ public class ReferenceSequenceSectionTest {
 	@Before
 	public void setUp() throws Exception {
 		initMocks(this);
-		sequenceSection = new ReferenceSequenceSection(indexStructure, 2, 17);
+		sequenceSection = new ReferenceSequenceSection(2, indexStructure, 5, 17);
 	}
 
 	@Test
 	public void getContent() {
-		when(indexStructure.substring(2, 17)).thenReturn("reference-content");
+		when(indexStructure.substring(5, 17)).thenReturn("reference-content");
 
 		assertThat(sequenceSection.getContent(), is("reference-content"));
 	}
@@ -38,14 +38,14 @@ public class ReferenceSequenceSectionTest {
 
 	@Test
 	public void getFirstNCharactersDelegatesToIndexStructure() {
-		when(indexStructure.substring(2, 4)).thenReturn("refe");
+		when(indexStructure.substring(5, 4)).thenReturn("refe");
 
 		assertThat(sequenceSection.getFirstNCharacters(4), is("refe"));
 	}
 
 	@Test
 	public void getLastNCharactersDelegatesToIndexStructure() {
-		when(indexStructure.substring(2 + 17 - 4, 2 + 17)).thenReturn("tent");
+		when(indexStructure.substring(5 + 17 - 4, 5 + 17)).thenReturn("tent");
 
 		assertThat(sequenceSection.getLasttNCharacters(4), is("tent"));
 	}

@@ -6,22 +6,25 @@ public class ReferenceSequenceSection implements SectionWithOffset {
 
 	private final ReferenceIndexStructure indexStructure;
 	private final int offset;
-	private final int length;
+	private final int refLength;
+	private final int refIndex;
 
-	public ReferenceSequenceSection(final ReferenceIndexStructure indexStructure, final int offset, final int length) {
-		this.indexStructure = indexStructure;
+	public ReferenceSequenceSection(final int offset, final ReferenceIndexStructure indexStructure, final int refIndex,
+			final int refLength) {
 		this.offset = offset;
-		this.length = length;
+		this.indexStructure = indexStructure;
+		this.refIndex = refIndex;
+		this.refLength = refLength;
 	}
 
 	@Override
 	public String getContent() {
-		return indexStructure.substring(getOffset(), length);
+		return indexStructure.substring(refIndex, refLength);
 	}
 
 	@Override
 	public int getLength() {
-		return length;
+		return refLength;
 	}
 
 	@Override
@@ -31,12 +34,12 @@ public class ReferenceSequenceSection implements SectionWithOffset {
 
 	@Override
 	public String getFirstNCharacters(final int n) {
-		return indexStructure.substring(getOffset(), n);
+		return indexStructure.substring(refIndex, n);
 	}
 
 	@Override
 	public String getLasttNCharacters(final int n) {
-		final int endIndex = getOffset() + getLength();
+		final int endIndex = refIndex + refLength;
 		return indexStructure.substring(endIndex - n, endIndex);
 	}
 }

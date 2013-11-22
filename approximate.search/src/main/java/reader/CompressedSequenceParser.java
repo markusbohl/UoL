@@ -3,12 +3,23 @@ package reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import datastructure.ReferenceIndexStructure;
+import entity.ReferenceSequenceSection;
 import entity.SectionWithOffset;
 import entity.SequenceSection;
 
 public class CompressedSequenceParser {
 
+	private final ReferenceIndexStructure indexStructure;
 	private final ArrayList<SectionWithOffset> rawEntries = new ArrayList<>();
+	private final ArrayList<SectionWithOffset> relativeMatchEntries = new ArrayList<>();
+
+	@Inject
+	CompressedSequenceParser(final ReferenceIndexStructure indexStructure) {
+		this.indexStructure = indexStructure;
+	}
 
 	public void parse(final String string, final int minLength) {
 		int i = 0;
@@ -20,15 +31,22 @@ public class CompressedSequenceParser {
 					final int endIndex = string.indexOf(')', i + 2);
 					final String content = string.substring(beginIndex, endIndex);
 					if (content.length() >= minLength) {
-						addRawEntry(content, offset);
+						addRawEntry(offset, content);
 					}
 					i = endIndex;
 					offset += content.length();
 				} else {
-					final int beginIndex = string.indexOf(',', i + 2) + 1;
-					final int endIndex = string.indexOf(')', i + 3);
+					final int indexOfComma = string.indexOf(',', i + 2);
+					final int indexOfRightParenthesis = string.indexOf(')', i + 3);
+					final int referenceIndex = Integer.valueOf(string.substring(i + 1, indexOfComma));
+					final int referenceLength = Integer.valueOf(string.substring(indexOfComma + 1,
+							indexOfRightParenthesis));
+					final int endIndex = indexOfRightParenthesis;
+					if (referenceLength >= minLength) {
+						addRelativeMatchEntry(offset, referenceIndex, referenceLength);
+					}
 					i = endIndex;
-					offset += Integer.valueOf(string.substring(beginIndex, endIndex));
+					offset += referenceLength;
 				}
 			} else {
 				i++;
@@ -36,12 +54,19 @@ public class CompressedSequenceParser {
 		}
 	}
 
-	private void addRawEntry(final String content, final int offset) {
-		rawEntries.add(new SequenceSection(content, offset));
+	private void addRawEntry(final int offset, final String content) {
+		rawEntries.add(new SequenceSection(offset, content));
+	}
+
+	private void addRelativeMatchEntry(final int offset, final int referenceIndex, final int referenceLength) {
+		relativeMatchEntries.add(new ReferenceSequenceSection(offset, indexStructure, referenceIndex, referenceLength));
 	}
 
 	public List<SectionWithOffset> getRawEntries() {
 		return rawEntries;
 	}
 
+	public List<SectionWithOffset> getRelativeMatchEntries() {
+		return relativeMatchEntries;
+	}
 }

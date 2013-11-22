@@ -17,7 +17,7 @@ public class SequenceSectionTest {
 
 	@Before
 	public void setUp() throws Exception {
-		sequenceSection = new SequenceSection("content", 5);
+		sequenceSection = new SequenceSection(5, "content");
 	}
 
 	@Test
