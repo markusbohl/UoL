@@ -38,7 +38,7 @@ public class CompressedSequenceParserTest {
 
 	@Test
 	@Parameters
-	public void parseRawEntries(final String string, final List<SequenceSection> expectedSections) {
+	public void parseRawEntries(final String string, final List<SectionWithOffset> expectedSections) {
 		parser.parse(string, 3);
 
 		assertEqualEntries(parser.getRawEntries(), expectedSections);
@@ -56,7 +56,7 @@ public class CompressedSequenceParserTest {
 
 	@Test
 	@Parameters
-	public void mindMinLengthWhenParsingRawEntries(final int minLength, final List<SequenceSection> expectedSections) {
+	public void mindMinLengthWhenParsingRawEntries(final int minLength, final List<SectionWithOffset> expectedSections) {
 		parser.parse("R(a)R(ab)R(abc)R(abcd)", minLength);
 
 		assertEqualEntries(parser.getRawEntries(), expectedSections);
@@ -80,14 +80,14 @@ public class CompressedSequenceParserTest {
 		);
 	}
 
-	private static void assertEqualEntries(final List<SequenceSection> actualSections,
-			final List<SequenceSection> expectedSections) {
+	private static void assertEqualEntries(final List<SectionWithOffset> actualSections,
+			final List<SectionWithOffset> expectedSections) {
 
 		assertThat(actualSections.size(), is(expectedSections.size()));
 
 		for (int i = 0; i < expectedSections.size(); i++) {
-			final SequenceSection actual = actualSections.get(i);
-			final SequenceSection expected = expectedSections.get(i);
+			final SectionWithOffset actual = actualSections.get(i);
+			final SectionWithOffset expected = expectedSections.get(i);
 
 			assertThat(actual.getContent(), is(expected.getContent()));
 			assertThat(actual.getLength(), is(expected.getLength()));

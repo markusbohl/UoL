@@ -3,11 +3,12 @@ package reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.SectionWithOffset;
 import entity.SequenceSection;
 
 public class CompressedSequenceParser {
 
-	private final ArrayList<SequenceSection> rawEntries = new ArrayList<>();
+	private final ArrayList<SectionWithOffset> rawEntries = new ArrayList<>();
 
 	public void parse(final String string, final int minLength) {
 		int i = 0;
@@ -39,7 +40,7 @@ public class CompressedSequenceParser {
 		rawEntries.add(new SequenceSection(content, offset));
 	}
 
-	public List<SequenceSection> getRawEntries() {
+	public List<SectionWithOffset> getRawEntries() {
 		return rawEntries;
 	}
 
