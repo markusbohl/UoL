@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import preparation.SequenceProvider;
+import preparation.StringReader;
 import datastructure.ReferenceIndexStructure;
 
 public class InitializationTest {
@@ -18,7 +18,7 @@ public class InitializationTest {
 	private Initialization initialization;
 
 	@Mock
-	private SequenceProvider sequenceProvider;
+	private StringReader sequenceProvider;
 	@Mock
 	private ReferenceIndexStructure referenceIndexStructure;
 
@@ -30,7 +30,7 @@ public class InitializationTest {
 
 	@Test
 	public void shouldInitReferenceIndexStructureWithProvidedSequence() {
-		when(sequenceProvider.getSequence()).thenReturn("providedString");
+		when(sequenceProvider.read()).thenReturn("providedString");
 
 		initialization.init();
 
