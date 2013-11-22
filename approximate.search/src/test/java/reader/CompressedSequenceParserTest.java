@@ -1,7 +1,6 @@
 package reader;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static junitparams.JUnitParamsRunner.$;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
@@ -43,7 +42,7 @@ public class CompressedSequenceParserTest {
 
 	@Test
 	public void shouldReturnEmtpyListWhenNoRawEntriesExist() throws Exception {
-		parser.parse("", 0);
+		parser.parse("");
 
 		assertThat(parser.getRawEntries(), is(empty()));
 		assertThat(parser.getRelativeMatchEntries(), is(empty()));
@@ -52,7 +51,7 @@ public class CompressedSequenceParserTest {
 	@Test
 	@Parameters
 	public void parseRawEntries(final String string, final List<SectionWithOffset> expectedSections) {
-		parser.parse(string, 0);
+		parser.parse(string);
 
 		assertEqualEntries(parser.getRawEntries(), expectedSections);
 	}
@@ -66,33 +65,9 @@ public class CompressedSequenceParserTest {
 
 	@Test
 	@Parameters
-	public void mindMinLengthWhenParsingRawEntries(final int minLength, final List<SectionWithOffset> expectedSections) {
-		parser.parse("R(a)R(ab)R(abc)R(abcd)", minLength);
-
-		assertEqualEntries(parser.getRawEntries(), expectedSections);
-	}
-
-	Object parametersForMindMinLengthWhenParsingRawEntries() {
-		return $(
-				$(5, emptyList()),
-				$(4, asList(new SequenceSection(6, "abcd"))),
-				$(3, asList(new SequenceSection(3, "abc"), new SequenceSection(6, "abcd"))),
-				$(2,
-						asList(new SequenceSection(1, "ab"), new SequenceSection(3, "abc"), new SequenceSection(6,
-								"abcd"))),
-				$(1,
-						asList(new SequenceSection(0, "a"), new SequenceSection(1, "ab"),
-								new SequenceSection(3, "abc"), new SequenceSection(6, "abcd"))),
-				$(0,
-						asList(new SequenceSection(0, "a"), new SequenceSection(1, "ab"),
-								new SequenceSection(3, "abc"), new SequenceSection(6, "abcd"))));
-	}
-
-	@Test
-	@Parameters
 	public void parseRelativeMatchEntries(final String string, final List<SectionWithOffset> expectedSections) {
 		when(indexStructure.substring(anyInt(), anyInt())).thenReturn("anyContent");
-		parser.parse(string, 0);
+		parser.parse(string);
 
 		assertEqualEntries(parser.getRelativeMatchEntries(), expectedSections);
 	}
@@ -112,32 +87,8 @@ public class CompressedSequenceParserTest {
 	}
 
 	@Test
-	@Parameters
-	public void mindMinLengthWhenParsingRelativeMatchEntries(final int minLength,
-			final List<SectionWithOffset> expectedSections) {
-		parser.parse("RM(0,1)RM(0,2)RM(0,3)", minLength);
-
-		assertEqualEntries(parser.getRelativeMatchEntries(), expectedSections);
-	}
-
-	Object parametersForMindMinLengthWhenParsingRelativeMatchEntries() {
-		final ReferenceIndexStructure ris = mock(ReferenceIndexStructure.class);
-
-		return $(
-				$(4, emptyList()),
-				$(3, asList(new ReferenceSequenceSection(3, ris, 0, 3))),
-				$(2, asList(new ReferenceSequenceSection(1, ris, 0, 2), new ReferenceSequenceSection(3, ris, 0, 3))),
-				$(1,
-						asList(new ReferenceSequenceSection(0, ris, 0, 1), new ReferenceSequenceSection(1, ris, 0, 2),
-								new ReferenceSequenceSection(3, ris, 0, 3))),
-				$(0,
-						asList(new ReferenceSequenceSection(0, ris, 0, 1), new ReferenceSequenceSection(1, ris, 0, 2),
-								new ReferenceSequenceSection(3, ris, 0, 3))));
-	}
-
-	@Test
 	public void verifySettingOfCorrectRefIndex() {
-		parser.parse("RM(2,5)", 0);
+		parser.parse("RM(2,5)");
 		parser.getRelativeMatchEntries().get(0).getContent();
 
 		verify(indexStructure).substring(2, 5);

@@ -21,7 +21,7 @@ public class CompressedSequenceParser {
 		this.indexStructure = indexStructure;
 	}
 
-	public void parse(final String string, final int minLength) {
+	public void parse(final String string) {
 		int i = 0;
 		int offset = 0;
 		while (i < string.length()) {
@@ -30,9 +30,7 @@ public class CompressedSequenceParser {
 					final int beginIndex = i + 1;
 					final int endIndex = string.indexOf(')', i + 2);
 					final String content = string.substring(beginIndex, endIndex);
-					if (content.length() >= minLength) {
-						addRawEntry(offset, content);
-					}
+					addRawEntry(offset, content);
 					i = endIndex;
 					offset += content.length();
 				} else {
@@ -42,9 +40,7 @@ public class CompressedSequenceParser {
 					final int referenceLength = Integer.valueOf(string.substring(indexOfComma + 1,
 							indexOfRightParenthesis));
 					final int endIndex = indexOfRightParenthesis;
-					if (referenceLength >= minLength) {
-						addRelativeMatchEntry(offset, referenceIndex, referenceLength);
-					}
+					addRelativeMatchEntry(offset, referenceIndex, referenceLength);
 					i = endIndex;
 					offset += referenceLength;
 				}
