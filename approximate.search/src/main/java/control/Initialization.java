@@ -2,7 +2,7 @@ package control;
 
 import javax.inject.Inject;
 
-import reader.SequenceProvider;
+import preparation.SequenceProvider;
 import datastructure.ReferenceIndexStructure;
 
 public class Initialization {

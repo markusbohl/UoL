@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import reader.SequenceProvider;
+import preparation.SequenceProvider;
 import datastructure.ReferenceIndexStructure;
 
 public class InitializationTest {
