@@ -34,7 +34,7 @@ public class SequenceSection implements SectionWithOffset {
 	}
 
 	@Override
-	public String getLasttNCharacters(final int n) {
+	public String getLastNCharacters(final int n) {
 		if (n >= getLength()) {
 			return content;
 		}

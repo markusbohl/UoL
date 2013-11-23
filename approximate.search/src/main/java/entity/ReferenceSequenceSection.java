@@ -38,7 +38,7 @@ public class ReferenceSequenceSection implements SectionWithOffset {
 	}
 
 	@Override
-	public String getLasttNCharacters(final int n) {
+	public String getLastNCharacters(final int n) {
 		final int endIndex = refIndex + refLength;
 		return indexStructure.substring(endIndex - n, endIndex);
 	}

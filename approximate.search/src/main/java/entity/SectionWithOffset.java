@@ -10,6 +10,6 @@ public interface SectionWithOffset {
 
 	String getFirstNCharacters(int n);
 
-	String getLasttNCharacters(int n);
+	String getLastNCharacters(int n);
 
 }

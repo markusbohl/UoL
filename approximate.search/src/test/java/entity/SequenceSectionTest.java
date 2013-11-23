@@ -49,7 +49,7 @@ public class SequenceSectionTest {
 	@Test
 	@Parameters
 	public void getLastNCharacters(final Integer n, final String expectedResult) throws Exception {
-		assertThat(sequenceSection.getLasttNCharacters(n), is(expectedResult));
+		assertThat(sequenceSection.getLastNCharacters(n), is(expectedResult));
 	}
 
 	Object parametersForGetLastNCharacters() {
