@@ -1,6 +1,6 @@
 package preparation;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,8 +13,9 @@ import entity.SequenceSection;
 public class CompressedSequenceParser {
 
 	private final ReferenceIndexStructure indexStructure;
-	private final ArrayList<SectionWithOffset> rawEntries = new ArrayList<>();
-	private final ArrayList<SectionWithOffset> relativeMatchEntries = new ArrayList<>();
+	private final List<SectionWithOffset> rawEntries = new LinkedList<>();
+	private final List<SectionWithOffset> relativeMatchEntries = new LinkedList<>();
+	private final List<SectionWithOffset> allEntries = new LinkedList<>();
 
 	@Inject
 	CompressedSequenceParser(final ReferenceIndexStructure indexStructure) {
@@ -51,11 +52,18 @@ public class CompressedSequenceParser {
 	}
 
 	private void addRawEntry(final int offset, final String content) {
-		rawEntries.add(new SequenceSection(offset, content));
+		final SequenceSection section = new SequenceSection(offset, content);
+
+		allEntries.add(section);
+		rawEntries.add(section);
 	}
 
 	private void addRelativeMatchEntry(final int offset, final int referenceIndex, final int referenceLength) {
-		relativeMatchEntries.add(new ReferenceSequenceSection(offset, indexStructure, referenceIndex, referenceLength));
+		final ReferenceSequenceSection section = new ReferenceSequenceSection(offset, indexStructure, referenceIndex,
+				referenceLength);
+
+		allEntries.add(section);
+		relativeMatchEntries.add(section);
 	}
 
 	public List<SectionWithOffset> getRawEntries() {
@@ -64,5 +72,9 @@ public class CompressedSequenceParser {
 
 	public List<SectionWithOffset> getRelativeMatchEntries() {
 		return relativeMatchEntries;
+	}
+
+	public List<SectionWithOffset> getAllEntries() {
+		return allEntries;
 	}
 }

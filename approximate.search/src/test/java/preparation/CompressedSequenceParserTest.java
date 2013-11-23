@@ -3,6 +3,7 @@ package preparation;
 import static java.util.Arrays.asList;
 import static junitparams.JUnitParamsRunner.$;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyInt;
@@ -21,7 +22,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import preparation.CompressedSequenceParser;
 import datastructure.ReferenceIndexStructure;
 import entity.ReferenceSequenceSection;
 import entity.SectionWithOffset;
@@ -93,6 +93,13 @@ public class CompressedSequenceParserTest {
 		parser.getRelativeMatchEntries().get(0).getContent();
 
 		verify(indexStructure).substring(2, 5);
+	}
+
+	@Test
+	public void getAllEntries() {
+		parser.parse("R(abc)RM(2,5)R(def)RM(7,10)");
+
+		assertThat(parser.getAllEntries(), hasSize(4));
 	}
 
 	private static void assertEqualEntries(final List<SectionWithOffset> actualSections,
