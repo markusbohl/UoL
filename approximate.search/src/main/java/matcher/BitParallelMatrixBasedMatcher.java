@@ -47,9 +47,9 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 			x = hp << 1;
 			vn = x & d0;
 			vp = (hn << 1) | ~(x | d0);
-			if ((hp & (0b1 << pattern.length())) != 0l) {
+			if ((hp & (0b1 << pattern.length() - 1)) != 0l) {
 				err++;
-			} else if ((hn & (0b1 << pattern.length())) != 0l) {
+			} else if ((hn & (0b1 << pattern.length() - 1)) != 0l) {
 				err--;
 			}
 			if (err <= allowedErrors) {
