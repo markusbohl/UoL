@@ -12,6 +12,9 @@ import entity.SequenceSection;
 
 public class CompressedSequenceParser {
 
+	private static final int MIN_OFFSET_TO_COMMA = 2;
+	private static final int MIN_OFFSET_TO_END_OF_R_ENTRY = 2;
+	private static final int MIN_OFFSET_TO_END_OF_RM_ENTRY = 3;
 	private final ReferenceIndexStructure indexStructure;
 	private final List<SectionWithOffset> rawEntries = new LinkedList<>();
 	private final List<SectionWithOffset> relativeMatchEntries = new LinkedList<>();
@@ -29,14 +32,14 @@ public class CompressedSequenceParser {
 			if (string.charAt(i) == '(') {
 				if (string.charAt(i - 1) == 'R') {
 					final int beginIndex = i + 1;
-					final int endIndex = string.indexOf(')', i + 2);
+					final int endIndex = string.indexOf(')', i + MIN_OFFSET_TO_END_OF_R_ENTRY);
 					final String content = string.substring(beginIndex, endIndex);
 					addRawEntry(offset, content);
 					i = endIndex;
 					offset += content.length();
 				} else {
-					final int indexOfComma = string.indexOf(',', i + 2);
-					final int indexOfRightParenthesis = string.indexOf(')', i + 3);
+					final int indexOfComma = string.indexOf(',', i + MIN_OFFSET_TO_COMMA);
+					final int indexOfRightParenthesis = string.indexOf(')', i + MIN_OFFSET_TO_END_OF_RM_ENTRY);
 					final int referenceIndex = Integer.valueOf(string.substring(i + 1, indexOfComma));
 					final int referenceLength = Integer.valueOf(string.substring(indexOfComma + 1,
 							indexOfRightParenthesis));

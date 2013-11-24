@@ -23,28 +23,28 @@ public class OverlappingStringBuilder {
 		}
 	}
 
-	private String buildFirstHalf(String stringSoFar, final List<SectionWithOffset> sections, final int index,
+	private String buildFirstHalf(final String stringSoFar, final List<SectionWithOffset> sections, final int index,
 			final int halfLength) {
 		final int noOfCharsToRead = halfLength - stringSoFar.length();
 		final SectionWithOffset currentSection = sections.get(index);
-		stringSoFar = currentSection.getLastNCharacters(noOfCharsToRead) + stringSoFar;
+		final String currentString = currentSection.getLastNCharacters(noOfCharsToRead) + stringSoFar;
 
-		if (stringSoFar.length() < halfLength && index > 0) {
-			return buildFirstHalf(stringSoFar, sections, index - 1, halfLength);
+		if (currentString.length() < halfLength && index > 0) {
+			return buildFirstHalf(currentString, sections, index - 1, halfLength);
 		}
-		return stringSoFar;
+		return currentString;
 	}
 
-	private String buildOverlappingString(String stringSoFar, final List<SectionWithOffset> sections, final int index,
-			final int length) {
+	private String buildOverlappingString(final String stringSoFar, final List<SectionWithOffset> sections,
+			final int index, final int length) {
 		final int noOfCharsToRead = length - stringSoFar.length();
 		final SectionWithOffset currentSection = sections.get(index);
-		stringSoFar = stringSoFar + currentSection.getFirstNCharacters(noOfCharsToRead);
+		final String currentString = stringSoFar + currentSection.getFirstNCharacters(noOfCharsToRead);
 
-		if (stringSoFar.length() < length && isNotLastElement(sections, index)) {
-			return buildOverlappingString(stringSoFar, sections, index + 1, length);
+		if (currentString.length() < length && isNotLastElement(sections, index)) {
+			return buildOverlappingString(currentString, sections, index + 1, length);
 		}
-		return stringSoFar;
+		return currentString;
 	}
 
 	private boolean isNotLastElement(final List<SectionWithOffset> sequenceSections, final int i) {
