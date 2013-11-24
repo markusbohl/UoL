@@ -7,7 +7,7 @@
 <!--
     Checkstyle-Configuration: MyCheckstyleConfiguration
     Description: 
-Slightly modified version of Sun Checks that better matches my code formatter setting of Eclipse.
+Slightly modified version of Sun Checks that better matches my code formatter setting of Eclipse. 
 -->
 <module name="Checker">
   <property name="severity" value="warning"/>
@@ -17,7 +17,10 @@ Slightly modified version of Sun Checks that better matches my code formatter se
       <property name="suppressLoadErrors" value="true"/>
     </module>
     <module name="JavadocType"/>
-    <module name="JavadocVariable"/>
+    <module name="JavadocVariable">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
     <module name="JavadocStyle"/>
     <module name="ConstantName"/>
     <module name="LocalFinalVariableName"/>
@@ -34,7 +37,7 @@ Slightly modified version of Sun Checks that better matches my code formatter se
     <module name="UnusedImports"/>
     <module name="LineLength">
       <property name="max" value="120"/>
-      <property name="tabWidth" value="12"/>
+      <property name="tabWidth" value="4"/>
     </module>
     <module name="MethodLength"/>
     <module name="ParameterNumber"/>
