@@ -85,7 +85,10 @@ Slightly modified version of Sun Checks that better matches my code formatter se
     </module>
     <module name="UpperEll"/>
   </module>
-  <module name="JavadocPackage"/>
+  <module name="JavadocPackage">
+    <property name="severity" value="ignore"/>
+    <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+  </module>
   <module name="NewlineAtEndOfFile">
     <property name="severity" value="ignore"/>
     <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
