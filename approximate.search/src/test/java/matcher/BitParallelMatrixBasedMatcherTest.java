@@ -1,6 +1,7 @@
 package matcher;
 
 import static junitparams.JUnitParamsRunner.$;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
@@ -33,7 +34,7 @@ public class BitParallelMatrixBasedMatcherTest {
 	@Parameters
 	public void findMatches(final String text, final String pattern, final int allowedErrors,
 			final Integer[] expectedPositions) {
-		final List<Integer> actualPositions = matcher.search(text, pattern, allowedErrors);
+		final List<Integer> actualPositions = matcher.search(text, pattern, allowedErrors, 0);
 
 		assertThat(actualPositions, hasSize(expectedPositions.length));
 		assertThat(actualPositions, hasItems(expectedPositions));
@@ -44,5 +45,12 @@ public class BitParallelMatrixBasedMatcherTest {
 				$("AANNN", "AAA", 1, new Integer[] { 1, 2 }), $("NNNAA", "AAA", 1, new Integer[] { 4 }),
 				$("AGCGGCT", "AGTCG", 1, new Integer[] { 3 }), $("AGCGGCT", "AGTCG", 2, new Integer[] { 2, 3, 4 }),
 				$("AGCGGCTAGCGGCT", "AGTCG", 1, new Integer[] { 3, 10 }));
+	}
+
+	@Test
+	@Parameters({ "0,4", "5,9", "10,14" })
+	public void mindOffsetOfMatches(final int offset, final int expectedPosition) {
+		assertThat(matcher.search("NNAAANN", "AAA", 0, offset), hasItem(expectedPosition));
+
 	}
 }

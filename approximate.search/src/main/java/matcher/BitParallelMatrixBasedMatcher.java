@@ -32,9 +32,9 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 	}
 
 	@Override
-	public List<Integer> search(final String text, final String pattern, final int allowedErrors) {
+	public List<Integer> search(final String text, final String pattern, final int allowedErrors, final int offset) {
 		final LinkedList<Integer> matchingPositions = new LinkedList<>();
-		final long[] b = initPatternBitmask(pattern);
+		final long[] b = initPatternBitmasks(pattern);
 		long vp = ~0l;
 		long vn = 0l;
 		int err = pattern.length();
@@ -53,14 +53,14 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 				err--;
 			}
 			if (err <= allowedErrors) {
-				matchingPositions.add(i);
+				matchingPositions.add(i + offset);
 			}
 		}
 
 		return matchingPositions;
 	}
 
-	private long[] initPatternBitmask(final String pattern) {
+	private long[] initPatternBitmasks(final String pattern) {
 		final long[] b = new long[alphabet.size()];
 
 		for (int i = 0; i < pattern.length(); i++) {

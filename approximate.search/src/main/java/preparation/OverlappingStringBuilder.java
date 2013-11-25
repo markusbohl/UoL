@@ -10,6 +10,10 @@ public class OverlappingStringBuilder {
 
 	private final List<SectionWithOffset> overlappingAreas = new LinkedList<>();
 
+	public List<SectionWithOffset> getOverlappingAreas() {
+		return overlappingAreas;
+	}
+
 	public void feed(final List<SectionWithOffset> sequenceSections, final int patternLength) {
 		final int halfLength = patternLength - 1;
 		final int areaLength = 2 * halfLength;
@@ -49,9 +53,5 @@ public class OverlappingStringBuilder {
 
 	private boolean isNotLastElement(final List<SectionWithOffset> sequenceSections, final int i) {
 		return i + 1 != sequenceSections.size();
-	}
-
-	public List<SectionWithOffset> getOverlappingAreas() {
-		return overlappingAreas;
 	}
 }
