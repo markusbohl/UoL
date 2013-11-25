@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 
+	private static final long _0B1 = 0b1;
 	private final Set<Character> alphabet;
 	private final Map<Character, Integer> charToIndexMap;
 
@@ -19,7 +20,7 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 		this.charToIndexMap = initCharToIndexMap(alphabet);
 	}
 
-	private static final Map<Character, Integer> initCharToIndexMap(final Set<Character> alphabet) {
+	private static Map<Character, Integer> initCharToIndexMap(final Set<Character> alphabet) {
 		final Map<Character, Integer> charToIndexMap = new HashMap<>();
 
 		int index = 0;
@@ -35,8 +36,8 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 	public List<Integer> search(final String text, final String pattern, final int allowedErrors, final int offset) {
 		final LinkedList<Integer> matchingPositions = new LinkedList<>();
 		final long[] b = initPatternBitmasks(pattern);
-		long vp = ~0l;
-		long vn = 0l;
+		long vp = ~0L;
+		long vn = 0L;
 		int err = pattern.length();
 
 		for (int i = 0; i < text.length(); i++) {
@@ -47,9 +48,9 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 			x = hp << 1;
 			vn = x & d0;
 			vp = (hn << 1) | ~(x | d0);
-			if ((hp & (0b1 << pattern.length() - 1)) != 0l) {
+			if ((hp & (_0B1 << pattern.length() - 1)) != 0L) {
 				err++;
-			} else if ((hn & (0b1 << pattern.length() - 1)) != 0l) {
+			} else if ((hn & (_0B1 << pattern.length() - 1)) != 0L) {
 				err--;
 			}
 			if (err <= allowedErrors) {
@@ -67,7 +68,7 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 			final char currentChar = pattern.charAt(i);
 			final int currentIndex = charToIndexMap.get(currentChar);
 
-			b[currentIndex] = b[currentIndex] | (0b1 << i);
+			b[currentIndex] = b[currentIndex] | (_0B1 << i);
 		}
 
 		return b;
