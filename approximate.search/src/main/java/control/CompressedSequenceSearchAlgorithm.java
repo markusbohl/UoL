@@ -33,11 +33,35 @@ public class CompressedSequenceSearchAlgorithm implements ApproximateSearchAlgor
 	@Override
 	public List<Integer> search(final String pattern, final int allowedErrors) {
 		final List<Integer> matchingPositions = new LinkedList<>();
-		sectionsProvider = sectionsProviderFactory.createSectionsProviderFor(pattern.length());
+		final int patternLength = pattern.length();
+		final int typicalSearchLength = patternLength + 2 * allowedErrors;
+		final String[] partition = partitioner.partition(pattern, allowedErrors);
 
-		for (final String subpattern : partitioner.partition(pattern, allowedErrors)) {
-			indexStructure.indicesOf(subpattern);
+		for (int i = 0; i < partition.length; i++) {
+			final String subPattern = partition[i];
+			final int subPatternLength = subPattern.length();
+			for (final Integer posOfSubpatternInIndex : indexStructure.indicesOf(subPattern)) {
+				if (i == 0) {
+					indexStructure.substring(posOfSubpatternInIndex, patternLength + allowedErrors);
+				} else if (i < partition.length - 1) {
+					final int posOfSubpatternInPattern = i * subPatternLength;
+					final int beginIndex = posOfSubpatternInIndex - posOfSubpatternInPattern - allowedErrors;
+					if (beginIndex >= 0) {
+						indexStructure.substring(beginIndex, typicalSearchLength);
+					} else if (beginIndex + posOfSubpatternInPattern + allowedErrors >= 0) {
+						final int length = patternLength - posOfSubpatternInPattern + allowedErrors;
+						indexStructure.substring(0, length);
+					}
+				} else {
+					final int beginIndex = posOfSubpatternInIndex - (patternLength - subPatternLength) - allowedErrors;
+					if (beginIndex >= 0) {
+						indexStructure.substring(beginIndex, typicalSearchLength);
+					}
+				}
+			}
 		}
+
+		sectionsProvider = sectionsProviderFactory.createSectionsProviderFor(patternLength);
 
 		for (final SectionWithOffset rawSection : sectionsProvider.getRawEntries()) {
 			matchingPositions.addAll(matchesInSection(rawSection, pattern, allowedErrors));
@@ -52,8 +76,6 @@ public class CompressedSequenceSearchAlgorithm implements ApproximateSearchAlgor
 
 	private List<Integer> matchesInSection(final SectionWithOffset section, final String pattern,
 			final int allowedErrors) {
-		final String content = section.getContent();
-		final int offset = section.getOffset();
-		return approximateMatcher.search(content, pattern, allowedErrors, offset);
+		return approximateMatcher.search(section.getContent(), pattern, allowedErrors, section.getOffset());
 	}
 }
