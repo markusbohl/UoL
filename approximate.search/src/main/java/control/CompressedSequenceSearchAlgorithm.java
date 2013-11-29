@@ -61,9 +61,6 @@ public class CompressedSequenceSearchAlgorithm implements ApproximateSearchAlgor
 							.addAll(matchesInReference(posOfSubpatternInIndex, length, pattern, allowedErrors));
 				} else if (isNotLastSubpattern(partition, i)) {
 					final int beginIndex = posOfSubpatternInIndex - posOfSubpatternInPattern - allowedErrors;
-					matchingPositions
-							.addAll(matchesInReference(beginIndex, typicalSearchLength, pattern, allowedErrors));
-
 					if (beginIndex >= 0) {
 						matchingPositions.addAll(matchesInReference(beginIndex, typicalSearchLength, pattern,
 								allowedErrors));
