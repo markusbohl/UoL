@@ -4,8 +4,9 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -29,12 +30,10 @@ import entity.SectionWithOffset;
 public class CompressedSequenceSearchAlgorithmTest {
 
 	private static final int ALLOWED_ERRORS = 2;
-
 	private static final String PATTERN = "pattern";
-
 	private static final int PATTERN_LENGTH = PATTERN.length();
 
-	private ApproximateSearchAlgorithm searchAlgorithm;
+	private ApproximateSearchAlgorithm algorithm;
 
 	@Mock
 	private SectionsProviderFactory sectionsProviderFactory;
@@ -46,26 +45,34 @@ public class CompressedSequenceSearchAlgorithmTest {
 	private ApproximateMatcher matcher;
 	@Mock
 	private SectionsProvider sectionProvider;
+	@Mock
+	private SectionWithOffset section1;
+	@Mock
+	private SectionWithOffset section2;
 
 	@Before
 	public void setUp() throws Exception {
 		initMocks(this);
-		searchAlgorithm = new CompressedSequenceSearchAlgorithm(sectionsProviderFactory, partitioner, indexStructure,
-				matcher);
 		when(partitioner.partition(eq(PATTERN), anyInt())).thenReturn(new String[] { "pa", "tt", "ern" });
 		when(sectionsProviderFactory.createSectionsProviderFor(anyInt())).thenReturn(sectionProvider);
+		when(section1.getContent()).thenReturn("content1");
+		when(section1.getOffset()).thenReturn(23);
+		when(section2.getContent()).thenReturn("content2");
+		when(section2.getOffset()).thenReturn(44);
+
+		algorithm = new CompressedSequenceSearchAlgorithm(sectionsProviderFactory, partitioner, indexStructure, matcher);
 	}
 
 	@Test
 	public void createSectionsProviderForGivenPatternLength() {
-		searchAlgorithm.search(PATTERN, 2);
+		algorithm.search(PATTERN, 2);
 
 		verify(sectionsProviderFactory).createSectionsProviderFor(PATTERN.length());
 	}
 
 	@Test
 	public void searchIndexStructureForSubpatterns() {
-		searchAlgorithm.search(PATTERN, ALLOWED_ERRORS);
+		algorithm.search(PATTERN, ALLOWED_ERRORS);
 
 		verify(indexStructure).indicesOf("pa");
 		verify(indexStructure).indicesOf("tt");
@@ -74,17 +81,11 @@ public class CompressedSequenceSearchAlgorithmTest {
 
 	@Test
 	public void searchForMatchesInRawEntries() {
-		final SectionWithOffset section1 = mock(SectionWithOffset.class);
-		final SectionWithOffset section2 = mock(SectionWithOffset.class);
-		when(section1.getContent()).thenReturn("content1");
-		when(section1.getOffset()).thenReturn(23);
-		when(section2.getContent()).thenReturn("content2");
-		when(section2.getOffset()).thenReturn(44);
-		when(sectionProvider.getRawEntries()).thenReturn(Arrays.asList(section1, section2));
 		when(matcher.search("content1", PATTERN, ALLOWED_ERRORS, 23)).thenReturn(Arrays.asList(30, 40));
 		when(matcher.search("content2", PATTERN, ALLOWED_ERRORS, 44)).thenReturn(Arrays.asList(50));
+		when(sectionProvider.getRawEntries()).thenReturn(Arrays.asList(section1, section2));
 
-		final List<Integer> matchingPositions = searchAlgorithm.search(PATTERN, ALLOWED_ERRORS);
+		final List<Integer> matchingPositions = algorithm.search(PATTERN, ALLOWED_ERRORS);
 
 		assertThat(matchingPositions, hasSize(3));
 		assertThat(matchingPositions, hasItems(30, 40, 50));
@@ -92,17 +93,11 @@ public class CompressedSequenceSearchAlgorithmTest {
 
 	@Test
 	public void searchForMatchesInOverlappingAreas() {
-		final SectionWithOffset section1 = mock(SectionWithOffset.class);
-		final SectionWithOffset section2 = mock(SectionWithOffset.class);
-		when(section1.getContent()).thenReturn("content1");
-		when(section1.getOffset()).thenReturn(23);
-		when(section2.getContent()).thenReturn("content2");
-		when(section2.getOffset()).thenReturn(44);
-		when(sectionProvider.getOverlappingAreas()).thenReturn(Arrays.asList(section1, section2));
 		when(matcher.search("content1", PATTERN, ALLOWED_ERRORS, 23)).thenReturn(Arrays.asList(30, 40));
 		when(matcher.search("content2", PATTERN, ALLOWED_ERRORS, 44)).thenReturn(Arrays.asList(50));
+		when(sectionProvider.getOverlappingAreas()).thenReturn(Arrays.asList(section1, section2));
 
-		final List<Integer> matchingPositions = searchAlgorithm.search(PATTERN, ALLOWED_ERRORS);
+		final List<Integer> matchingPositions = algorithm.search(PATTERN, ALLOWED_ERRORS);
 
 		assertThat(matchingPositions, hasSize(3));
 		assertThat(matchingPositions, hasItems(30, 40, 50));
@@ -114,10 +109,35 @@ public class CompressedSequenceSearchAlgorithmTest {
 		when(indexStructure.indicesOf("tt")).thenReturn(Collections.<Integer> emptyList());
 		when(indexStructure.indicesOf("ern")).thenReturn(Collections.<Integer> emptyList());
 
-		searchAlgorithm.search(PATTERN, ALLOWED_ERRORS);
+		algorithm.search(PATTERN, ALLOWED_ERRORS);
 
 		verify(indexStructure).substring(0, PATTERN_LENGTH + ALLOWED_ERRORS);
 		verify(indexStructure).substring(10, PATTERN_LENGTH + ALLOWED_ERRORS);
+	}
+
+	@Test
+	public void determineNeighborhoodAreaForMiddleSubpattern1() {
+		when(indexStructure.indicesOf("pa")).thenReturn(Collections.<Integer> emptyList());
+		when(indexStructure.indicesOf("tt")).thenReturn(Arrays.asList(0, 10));
+		when(indexStructure.indicesOf("ern")).thenReturn(Collections.<Integer> emptyList());
+
+		algorithm.search(PATTERN, ALLOWED_ERRORS);
+
+		verify(indexStructure).substring(0, 7);
+		verify(indexStructure).substring(6, 11);
+	}
+
+	@Test
+	public void determineNeighborhoodAreaForMiddleSubpattern2() {
+		when(partitioner.partition("longerpattern", 4)).thenReturn(new String[] { "lon", "ger", "pat", "tern" });
+		when(indexStructure.indicesOf("lon")).thenReturn(Collections.<Integer> emptyList());
+		when(indexStructure.indicesOf("ger")).thenReturn(Collections.<Integer> emptyList());
+		when(indexStructure.indicesOf("pat")).thenReturn(Arrays.asList(0));
+		when(indexStructure.indicesOf("tern")).thenReturn(Collections.<Integer> emptyList());
+
+		algorithm.search("longerpattern", 3);
+
+		verify(indexStructure, never()).substring(anyInt(), anyInt());
 	}
 
 	@Test
@@ -126,20 +146,29 @@ public class CompressedSequenceSearchAlgorithmTest {
 		when(indexStructure.indicesOf("tt")).thenReturn(Collections.<Integer> emptyList());
 		when(indexStructure.indicesOf("ern")).thenReturn(Arrays.asList(0, 10));
 
-		searchAlgorithm.search(PATTERN, ALLOWED_ERRORS);
+		algorithm.search(PATTERN, ALLOWED_ERRORS);
 
 		verify(indexStructure).substring(4, 11);
 	}
 
 	@Test
-	public void determineNeighborhoodAreaForMiddleSubpattern() {
-		when(indexStructure.indicesOf("pa")).thenReturn(Collections.<Integer> emptyList());
-		when(indexStructure.indicesOf("tt")).thenReturn(Arrays.asList(0, 10));
-		when(indexStructure.indicesOf("ern")).thenReturn(Collections.<Integer> emptyList());
+	public void searchForMatchesInRelativeMatchEntries() throws Exception {
+		when(partitioner.partition(anyString(), anyInt())).thenReturn(new String[] { "lon", "ger", "pat", "tern" });
+		when(indexStructure.indicesOf("lon")).thenReturn(Arrays.asList(0));
+		when(indexStructure.indicesOf("ger")).thenReturn(Arrays.asList(2, 5));
+		when(indexStructure.indicesOf("pat")).thenReturn(Arrays.asList(10));
+		when(indexStructure.indicesOf("tern")).thenReturn(Arrays.asList(15));
+		when(indexStructure.substring(anyInt(), anyInt())).thenReturn("substring1", "substring2", "substring3",
+				"substring4", "substring5");
+		when(matcher.search(eq("substring1"), anyString(), anyInt(), anyInt())).thenReturn(Arrays.asList(10));
+		when(matcher.search(eq("substring2"), anyString(), anyInt(), anyInt())).thenReturn(Arrays.asList(20));
+		when(matcher.search(eq("substring3"), anyString(), anyInt(), anyInt())).thenReturn(Arrays.asList(30));
+		when(matcher.search(eq("substring4"), anyString(), anyInt(), anyInt())).thenReturn(Arrays.asList(40));
+		when(matcher.search(eq("substring5"), anyString(), anyInt(), anyInt())).thenReturn(Arrays.asList(50));
 
-		searchAlgorithm.search(PATTERN, ALLOWED_ERRORS);
+		final List<Integer> matchingPositions = algorithm.search("longerpattern", 3);
 
-		verify(indexStructure).substring(0, 7);
-		verify(indexStructure).substring(6, 11);
+		assertThat(matchingPositions, hasSize(5));
+		assertThat(matchingPositions, hasItems(10, 20, 30, 40, 50));
 	}
 }
