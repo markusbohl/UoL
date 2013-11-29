@@ -37,9 +37,9 @@ public class SectionsProviderTest {
 	@Mock
 	private CompressedSequenceParser parser;
 	@Mock
-	private StringReader reader;
+	private StringProvider provider;
 	@Mock
-	private OverlappingStringBuilder overlappingStringBuilder;
+	private OverlappingAreaBuilder overlappingStringBuilder;
 	@Mock
 	private ReferenceIndexStructure indexStructure;
 
@@ -53,13 +53,13 @@ public class SectionsProviderTest {
 		overlappingArea = new SequenceSection(8, "AGACGGTT");
 		sequenceSections = Arrays.asList(refSeqSection, seqSection);
 
-		when(reader.read()).thenReturn("RM(2,10)R(ATAGAC");
+		when(provider.provide()).thenReturn("RM(2,10)R(ATAGAC");
 		when(parser.getAllEntries()).thenReturn(sequenceSections);
 		when(parser.getRawEntries()).thenReturn(Arrays.asList(seqSection));
 		when(parser.getRelativeMatchEntries()).thenReturn(Arrays.asList(refSeqSection));
 		when(overlappingStringBuilder.getOverlappingAreas()).thenReturn(Arrays.asList(overlappingArea));
 
-		sectionsProvider = new SectionsProvider(reader, parser, overlappingStringBuilder, patternLength);
+		sectionsProvider = new SectionsProvider(provider, parser, overlappingStringBuilder, patternLength);
 	}
 
 	@Test

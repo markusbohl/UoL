@@ -11,13 +11,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(JUnitParamsRunner.class)
-public class KPlusPartitionerTest {
+public class NonOverlappingPartitionerTest {
 
 	private Partitioner partitioner;
 
 	@Before
 	public void setUp() {
-		partitioner = new KPlusPartitioner();
+		partitioner = new NonOverlappingPartitioner();
 	}
 
 	@Test

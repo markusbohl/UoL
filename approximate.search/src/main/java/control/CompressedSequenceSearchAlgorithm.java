@@ -82,11 +82,6 @@ public class CompressedSequenceSearchAlgorithm implements ApproximateSearchAlgor
 
 	private List<Integer> matchesInReference(final int beginIndex, final int length, final String pattern,
 			final int allowedErrors) {
-		if (beginIndex < 0) {
-			if (beginIndex + allowedErrors < 0) {
-
-			}
-		}
 		final String substring = indexStructure.substring(beginIndex, length);
 		return approximateMatcher.search(substring, pattern, allowedErrors, 0);
 	}

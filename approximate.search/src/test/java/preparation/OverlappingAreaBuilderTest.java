@@ -18,9 +18,9 @@ import datastructure.ReferenceIndexStructure;
 import entity.SectionWithOffset;
 import entity.SequenceSection;
 
-public class OverlappingStringBuilderTest {
+public class OverlappingAreaBuilderTest {
 
-	private OverlappingStringBuilder sectionsProvider;
+	private OverlappingAreaBuilder sectionsProvider;
 
 	@Mock
 	private ReferenceIndexStructure indexStructure;
@@ -28,7 +28,7 @@ public class OverlappingStringBuilderTest {
 	@Before
 	public void setUp() throws Exception {
 		initMocks(this);
-		sectionsProvider = new OverlappingStringBuilder();
+		sectionsProvider = new OverlappingAreaBuilder();
 		when(indexStructure.substring(anyInt(), anyInt())).thenReturn("");
 	}
 

@@ -1,6 +1,6 @@
 package preparation;
 
-public class KPlusPartitioner implements Partitioner {
+public class NonOverlappingPartitioner implements Partitioner {
 
 	@Override
 	public String[] partition(final String string, final int noOfParts) {

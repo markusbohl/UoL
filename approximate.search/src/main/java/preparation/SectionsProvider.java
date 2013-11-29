@@ -15,9 +15,9 @@ public class SectionsProvider {
 	private final List<SectionWithOffset> overlappingAreas;
 
 	@Inject
-	SectionsProvider(final StringReader reader, final CompressedSequenceParser parser,
-			final OverlappingStringBuilder overlappingStringBuilder, @Assisted final int patternLength) {
-		parser.parse(reader.read());
+	SectionsProvider(final StringProvider provider, final CompressedSequenceParser parser,
+			final OverlappingAreaBuilder overlappingStringBuilder, @Assisted final int patternLength) {
+		parser.parse(provider.provide());
 		overlappingStringBuilder.feed(parser.getAllEntries(), patternLength);
 
 		rawEntries = parser.getRawEntries();

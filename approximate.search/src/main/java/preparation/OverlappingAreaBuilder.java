@@ -6,7 +6,7 @@ import java.util.List;
 import entity.SectionWithOffset;
 import entity.SequenceSection;
 
-public class OverlappingStringBuilder {
+public class OverlappingAreaBuilder {
 
 	private final List<SectionWithOffset> overlappingAreas = new LinkedList<>();
 
