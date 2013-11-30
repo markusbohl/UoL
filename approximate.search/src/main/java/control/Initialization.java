@@ -1,6 +1,7 @@
 package control;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import preparation.StringProvider;
 import datastructure.ReferenceIndexStructure;
@@ -11,7 +12,8 @@ public class Initialization {
 	private final ReferenceIndexStructure referenceIndexStructure;
 
 	@Inject
-	Initialization(final StringProvider sequenceProvider, final ReferenceIndexStructure referenceIndexStructure) {
+	Initialization(@Named("reference.sequence") final StringProvider sequenceProvider,
+			final ReferenceIndexStructure referenceIndexStructure) {
 		this.sequenceProvider = sequenceProvider;
 		this.referenceIndexStructure = referenceIndexStructure;
 	}

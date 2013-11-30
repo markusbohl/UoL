@@ -3,6 +3,7 @@ package preparation;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import com.google.inject.assistedinject.Assisted;
 
@@ -15,8 +16,9 @@ public class SectionsProvider {
 	private final List<SectionWithOffset> overlappingAreas;
 
 	@Inject
-	SectionsProvider(final StringProvider provider, final CompressedSequenceParser parser,
-			final OverlappingAreaBuilder overlappingStringBuilder, @Assisted final int patternLength) {
+	SectionsProvider(@Named("compressed.sequence") final StringProvider provider,
+			final CompressedSequenceParser parser, final OverlappingAreaBuilder overlappingStringBuilder,
+			@Assisted final int patternLength) {
 		parser.parse(provider.provide());
 		overlappingStringBuilder.feed(parser.getAllEntries(), patternLength);
 

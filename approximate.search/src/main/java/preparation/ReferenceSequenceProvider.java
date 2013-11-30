@@ -1,36 +1,18 @@
 package preparation;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
-public class ReferenceSequenceProvider implements StringProvider {
-
-	private final BufferedReader bufferedReader;
+public class ReferenceSequenceProvider extends AbstractLineFilteringStringProvider {
 
 	@Inject
-	ReferenceSequenceProvider(final BufferedReader bufferedReader) {
-		this.bufferedReader = bufferedReader;
+	ReferenceSequenceProvider(@Named("reference.sequence") final BufferedReader bufferedReader) {
+		super(bufferedReader);
 	}
 
-	@Override
-	public String provide() {
-		final StringBuilder stringBuilder = new StringBuilder();
-
-		String line = null;
-		try {
-			while ((line = bufferedReader.readLine()) != null) {
-				if (line.startsWith(">")) {
-					continue;
-				}
-				stringBuilder.append(line);
-			}
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-
-		return stringBuilder.toString();
+	protected boolean accept(final String line) {
+		return !line.startsWith(">");
 	}
-
 }
