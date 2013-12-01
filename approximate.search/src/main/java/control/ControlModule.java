@@ -14,5 +14,6 @@ public class ControlModule extends AbstractModule {
 		install(new MatcherModule());
 		install(new PreparationModule());
 		install(new DatastructureModule());
+		bind(ApproximateSearchAlgorithm.class).to(CompressedSequenceSearchAlgorithm.class);
 	}
 }
