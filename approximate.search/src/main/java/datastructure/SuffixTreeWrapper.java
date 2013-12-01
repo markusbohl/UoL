@@ -2,8 +2,6 @@ package datastructure;
 
 import java.util.List;
 
-import datastructures.SuffixTree;
-
 public class SuffixTreeWrapper implements ReferenceIndexStructure {
 
 	private String string;
