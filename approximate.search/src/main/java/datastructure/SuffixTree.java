@@ -10,9 +10,9 @@ import java.util.TreeSet;
 
 /**
  * An adapted version of Justin Wetherell's implementation of a suffix tree based on the Ukkonnen's algorithm. The
- * original code can be found on <a
- * href="https://github.com/phishman3579/java-algorithms-implementation/blob/master/src/com/jwetherell
- * /algorithms/data_structures/SuffixTree.java">https://github.com/phishman3579/java-algorithms-implementation</a>
+ * original code can be found on <a href=
+ * "https://github.com/phishman3579/java-algorithms-implementation/blob/master/src/com/jwetherell/algorithms/data_structures/SuffixTree.java"
+ * >https://github.com/phishman3579/java-algorithms-implementation</a>
  * <p>
  * The changes include the implementation of an <code>indicesOf(C)</code> method which returns all indices at which a
  * given {@link CharSequence} can be found in the sequence the suffix tree has been created for. Moreover, the static
@@ -404,9 +404,9 @@ public class SuffixTree<C extends CharSequence> {
 
 	private static class Edge<C extends CharSequence> implements Comparable<Edge<C>> {
 
-		private static final int KEY_MOD = 2179; // Should be a prime that is
-													// roughly 10% larger than the
-													// String
+		private static final int PRIME_2179 = 2179; // Should be a prime that is
+												// roughly 10% larger than the
+												// String
 		private static int count = 1;
 
 		private SuffixTree<C> tree = null;
@@ -430,7 +430,7 @@ public class SuffixTree<C extends CharSequence> {
 		}
 
 		private static int key(final int node, final char c) {
-			return KEY_MOD * node + c;
+			return PRIME_2179 * node + c;
 		}
 
 		private void insert(final Edge<C> edge) {
@@ -444,7 +444,7 @@ public class SuffixTree<C extends CharSequence> {
 				e.startNode = -1;
 				final int j = i;
 				while (true) {
-					i = ++i % KEY_MOD;
+					i = ++i % PRIME_2179;
 					e = tree.edgeMap.get(i);
 					if (e == null) {
 						return;
