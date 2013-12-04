@@ -37,8 +37,8 @@ public class CompressedSequenceSearchAlgorithm implements ApproximateSearchAlgor
 		sectionsProvider = sectionsProviderFactory.createSectionsProviderFor(pattern.length());
 
 		matchingPositions.addAll(matchesInReference(pattern, allowedErrors));
-		matchingPositions.addAll(matchesInRawSection(pattern, allowedErrors));
-		matchingPositions.addAll(matchesInOverlappingAres(pattern, allowedErrors));
+		matchingPositions.addAll(matchesInSections(pattern, allowedErrors, sectionsProvider.getRawEntries()));
+		matchingPositions.addAll(matchesInSections(pattern, allowedErrors, sectionsProvider.getOverlappingAreas()));
 
 		return matchingPositions;
 	}
@@ -94,17 +94,10 @@ public class CompressedSequenceSearchAlgorithm implements ApproximateSearchAlgor
 		return index == 0;
 	}
 
-	private List<Integer> matchesInOverlappingAres(final String pattern, final int allowedErrors) {
+	private List<Integer> matchesInSections(final String pattern, final int allowedErrors,
+			final List<SectionWithOffset> sections) {
 		final List<Integer> matchingPositions = new LinkedList<>();
-		for (final SectionWithOffset overlappingArea : sectionsProvider.getOverlappingAreas()) {
-			matchingPositions.addAll(matchesInSection(overlappingArea, pattern, allowedErrors));
-		}
-		return matchingPositions;
-	}
-
-	private List<Integer> matchesInRawSection(final String pattern, final int allowedErrors) {
-		final List<Integer> matchingPositions = new LinkedList<>();
-		for (final SectionWithOffset rawSection : sectionsProvider.getRawEntries()) {
+		for (final SectionWithOffset rawSection : sections) {
 			matchingPositions.addAll(matchesInSection(rawSection, pattern, allowedErrors));
 		}
 		return matchingPositions;

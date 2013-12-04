@@ -404,7 +404,7 @@ public class SuffixTree<C extends CharSequence> {
 
 	private static class Edge<C extends CharSequence> implements Comparable<Edge<C>> {
 
-		private static final int PRIME_2179 = 2179; // Should be a prime that is
+		private static final int PRIME = 2179; // Should be a prime that is
 												// roughly 10% larger than the
 												// String
 		private static int count = 1;
@@ -430,7 +430,7 @@ public class SuffixTree<C extends CharSequence> {
 		}
 
 		private static int key(final int node, final char c) {
-			return PRIME_2179 * node + c;
+			return PRIME * node + c;
 		}
 
 		private void insert(final Edge<C> edge) {
@@ -444,7 +444,7 @@ public class SuffixTree<C extends CharSequence> {
 				e.startNode = -1;
 				final int j = i;
 				while (true) {
-					i = ++i % PRIME_2179;
+					i = ++i % PRIME;
 					e = tree.edgeMap.get(i);
 					if (e == null) {
 						return;
