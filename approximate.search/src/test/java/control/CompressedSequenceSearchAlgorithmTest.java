@@ -22,6 +22,7 @@ import preparation.NeighborhoodIdentifier;
 import preparation.ReferenceFilter;
 import preparation.SectionsProvider;
 import preparation.SectionsProviderFactory;
+import datastructure.ReferenceIndexStructure;
 import entity.Section;
 import entity.SectionWithOffset;
 
@@ -29,9 +30,12 @@ public class CompressedSequenceSearchAlgorithmTest {
 
 	private static final int ALLOWED_ERRORS = 2;
 	private static final String PATTERN = "pattern";
+	private static final int MIN_LENGTH = PATTERN.length() - ALLOWED_ERRORS;
 
 	private ApproximateSearchAlgorithm algorithm;
 
+	@Mock
+	private ReferenceIndexStructure indexStructure;
 	@Mock
 	private SectionsProviderFactory sectionsProviderFactory;
 	@Mock
@@ -39,7 +43,7 @@ public class CompressedSequenceSearchAlgorithmTest {
 	@Mock
 	private ReferenceFilter referenceFilter;
 	@Mock
-	private ApproximateMatcher matcher;
+	private ApproximateMatcher approximateMatcher;
 	@Mock
 	private SectionsProvider sectionProvider;
 	@Mock
@@ -56,8 +60,8 @@ public class CompressedSequenceSearchAlgorithmTest {
 		when(section2.getContent()).thenReturn("content2");
 		when(section2.getOffset()).thenReturn(44);
 
-		algorithm = new CompressedSequenceSearchAlgorithm(matcher, sectionsProviderFactory, neighborhoodIdentifier,
-				referenceFilter);
+		algorithm = new CompressedSequenceSearchAlgorithm(approximateMatcher, sectionsProviderFactory,
+				neighborhoodIdentifier, referenceFilter, indexStructure);
 	}
 
 	@Test
@@ -76,16 +80,20 @@ public class CompressedSequenceSearchAlgorithmTest {
 
 		algorithm.search(PATTERN, ALLOWED_ERRORS);
 
-		verify(referenceFilter).filter(relativeMatchEntries, neighborhoodAreas);
+		verify(referenceFilter).filter(relativeMatchEntries, neighborhoodAreas, MIN_LENGTH);
 	}
 
 	@Test
 	public void searchForMatchesInRelativeMatchEntries() {
-		final List<SectionWithOffset> filteredSections = Arrays.asList(section1, section2);
-		when(referenceFilter.filter(anyListOf(SectionWithOffset.class), anyListOf(Section.class))).thenReturn(
-				filteredSections);
-		when(matcher.search("content1", PATTERN, ALLOWED_ERRORS, 23)).thenReturn(Arrays.asList(30));
-		when(matcher.search("content2", PATTERN, ALLOWED_ERRORS, 44)).thenReturn(Arrays.asList(50, 51));
+		final Section filteredSection1 = new Section(5, 15);
+		final Section filteredSection2 = new Section(10, 20);
+		final List<Section> filteredSections = Arrays.asList(filteredSection1, filteredSection2);
+		when(referenceFilter.filter(anyListOf(SectionWithOffset.class), anyListOf(Section.class), anyInt()))
+				.thenReturn(filteredSections);
+		when(indexStructure.substring(5, 10)).thenReturn("content1");
+		when(indexStructure.substring(10, 10)).thenReturn("content2");
+		when(approximateMatcher.search("content1", PATTERN, ALLOWED_ERRORS, 5)).thenReturn(Arrays.asList(30));
+		when(approximateMatcher.search("content2", PATTERN, ALLOWED_ERRORS, 10)).thenReturn(Arrays.asList(50, 51));
 
 		final List<Integer> matchingPositions = algorithm.search(PATTERN, ALLOWED_ERRORS);
 
@@ -95,8 +103,8 @@ public class CompressedSequenceSearchAlgorithmTest {
 
 	@Test
 	public void searchForMatchesInRawEntries() {
-		when(matcher.search("content1", PATTERN, ALLOWED_ERRORS, 23)).thenReturn(Arrays.asList(30, 40));
-		when(matcher.search("content2", PATTERN, ALLOWED_ERRORS, 44)).thenReturn(Arrays.asList(50));
+		when(approximateMatcher.search("content1", PATTERN, ALLOWED_ERRORS, 23)).thenReturn(Arrays.asList(30, 40));
+		when(approximateMatcher.search("content2", PATTERN, ALLOWED_ERRORS, 44)).thenReturn(Arrays.asList(50));
 		when(sectionProvider.getRawEntries()).thenReturn(Arrays.asList(section1, section2));
 
 		final List<Integer> matchingPositions = algorithm.search(PATTERN, ALLOWED_ERRORS);
@@ -107,8 +115,8 @@ public class CompressedSequenceSearchAlgorithmTest {
 
 	@Test
 	public void searchForMatchesInOverlappingAreas() {
-		when(matcher.search("content1", PATTERN, ALLOWED_ERRORS, 23)).thenReturn(Arrays.asList(30, 40));
-		when(matcher.search("content2", PATTERN, ALLOWED_ERRORS, 44)).thenReturn(Arrays.asList(50));
+		when(approximateMatcher.search("content1", PATTERN, ALLOWED_ERRORS, 23)).thenReturn(Arrays.asList(30, 40));
+		when(approximateMatcher.search("content2", PATTERN, ALLOWED_ERRORS, 44)).thenReturn(Arrays.asList(50));
 		when(sectionProvider.getOverlappingAreas()).thenReturn(Arrays.asList(section1, section2));
 
 		final List<Integer> matchingPositions = algorithm.search(PATTERN, ALLOWED_ERRORS);
