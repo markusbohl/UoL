@@ -23,6 +23,7 @@ import preparation.ReferenceFilter;
 import preparation.SectionsProvider;
 import preparation.SectionsProviderFactory;
 import datastructure.ReferenceIndexStructure;
+import entity.ReferencedSectionWithOffset;
 import entity.Section;
 import entity.SectionWithOffset;
 
@@ -50,6 +51,10 @@ public class CompressedSequenceSearchAlgorithmTest {
 	private SectionWithOffset section1;
 	@Mock
 	private SectionWithOffset section2;
+	@Mock
+	private ReferencedSectionWithOffset referencedSection1;
+	@Mock
+	private ReferencedSectionWithOffset referencedSection2;
 
 	@Before
 	public void setUp() throws Exception {
@@ -59,9 +64,13 @@ public class CompressedSequenceSearchAlgorithmTest {
 		when(section1.getOffset()).thenReturn(23);
 		when(section2.getContent()).thenReturn("content2");
 		when(section2.getOffset()).thenReturn(44);
+		when(referencedSection1.getContent()).thenReturn("content1");
+		when(referencedSection1.getOffset()).thenReturn(23);
+		when(referencedSection2.getContent()).thenReturn("content2");
+		when(referencedSection2.getOffset()).thenReturn(44);
 
 		algorithm = new CompressedSequenceSearchAlgorithm(approximateMatcher, sectionsProviderFactory,
-				neighborhoodIdentifier, referenceFilter, indexStructure);
+				neighborhoodIdentifier, referenceFilter);
 	}
 
 	@Test
@@ -74,7 +83,8 @@ public class CompressedSequenceSearchAlgorithmTest {
 	@Test
 	public void filterIdentifiedNeighborhoodAreas() {
 		final List<Section> neighborhoodAreas = Arrays.asList(new Section(5, 16));
-		final List<SectionWithOffset> relativeMatchEntries = Arrays.asList(section1, section2);
+		final List<ReferencedSectionWithOffset> relativeMatchEntries = Arrays.asList(referencedSection1,
+				referencedSection2);
 		when(sectionProvider.getRelativeMatchEntries()).thenReturn(relativeMatchEntries);
 		when(neighborhoodIdentifier.identifiyAreasFor(PATTERN, ALLOWED_ERRORS)).thenReturn(neighborhoodAreas);
 
@@ -85,15 +95,14 @@ public class CompressedSequenceSearchAlgorithmTest {
 
 	@Test
 	public void searchForMatchesInRelativeMatchEntries() {
-		final Section filteredSection1 = new Section(5, 15);
-		final Section filteredSection2 = new Section(10, 20);
-		final List<Section> filteredSections = Arrays.asList(filteredSection1, filteredSection2);
-		when(referenceFilter.filter(anyListOf(SectionWithOffset.class), anyListOf(Section.class), anyInt()))
+		final List<ReferencedSectionWithOffset> filteredSections = Arrays
+				.asList(referencedSection1, referencedSection2);
+		when(referenceFilter.filter(anyListOf(ReferencedSectionWithOffset.class), anyListOf(Section.class), anyInt()))
 				.thenReturn(filteredSections);
 		when(indexStructure.substring(5, 10)).thenReturn("content1");
 		when(indexStructure.substring(10, 10)).thenReturn("content2");
-		when(approximateMatcher.search("content1", PATTERN, ALLOWED_ERRORS, 5)).thenReturn(Arrays.asList(30));
-		when(approximateMatcher.search("content2", PATTERN, ALLOWED_ERRORS, 10)).thenReturn(Arrays.asList(50, 51));
+		when(approximateMatcher.search("content1", PATTERN, ALLOWED_ERRORS, 23)).thenReturn(Arrays.asList(30));
+		when(approximateMatcher.search("content2", PATTERN, ALLOWED_ERRORS, 44)).thenReturn(Arrays.asList(50, 51));
 
 		final List<Integer> matchingPositions = algorithm.search(PATTERN, ALLOWED_ERRORS);
 

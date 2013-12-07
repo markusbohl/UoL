@@ -13,7 +13,7 @@ import datastructure.ReferenceIndexStructure;
 
 public class ReferenceSequenceSectionTest {
 
-	private SectionWithOffset sequenceSection;
+	private ReferencedSectionWithOffset sequenceSection;
 
 	@Mock
 	private ReferenceIndexStructure indexStructure;
@@ -48,5 +48,10 @@ public class ReferenceSequenceSectionTest {
 		when(indexStructure.substring(5 + 17 - 4, 5 + 17)).thenReturn("tent");
 
 		assertThat(sequenceSection.getLastNCharacters(4), is("tent"));
+	}
+
+	@Test
+	public void getRefIndex() {
+		assertThat(sequenceSection.getRefIndex(), is(5));
 	}
 }

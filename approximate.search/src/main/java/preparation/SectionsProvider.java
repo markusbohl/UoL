@@ -7,13 +7,14 @@ import javax.inject.Named;
 
 import com.google.inject.assistedinject.Assisted;
 
+import entity.ReferencedSectionWithOffset;
 import entity.SectionWithOffset;
 
 public class SectionsProvider {
 
 	private final List<SectionWithOffset> rawEntries;
-	private final List<SectionWithOffset> relativeMatchEntries;
 	private final List<SectionWithOffset> overlappingAreas;
+	private final List<ReferencedSectionWithOffset> relativeMatchEntries;
 
 	@Inject
 	SectionsProvider(@Named("compressed.sequence") final StringProvider provider,
@@ -31,7 +32,7 @@ public class SectionsProvider {
 		return rawEntries;
 	}
 
-	public List<SectionWithOffset> getRelativeMatchEntries() {
+	public List<ReferencedSectionWithOffset> getRelativeMatchEntries() {
 		return relativeMatchEntries;
 	}
 

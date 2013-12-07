@@ -102,7 +102,7 @@ public class CompressedSequenceParserTest {
 		assertThat(parser.getAllEntries(), hasSize(4));
 	}
 
-	private static void assertEqualEntries(final List<SectionWithOffset> actualSections,
+	private static void assertEqualEntries(final List<? extends SectionWithOffset> actualSections,
 			final List<SectionWithOffset> expectedSections) {
 
 		assertThat(actualSections.size(), is(expectedSections.size()));

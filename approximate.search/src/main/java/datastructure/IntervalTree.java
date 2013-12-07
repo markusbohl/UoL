@@ -1,14 +1,10 @@
 package datastructure;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * An adapted version of Justin Wetherell's implementation of an interval tree - an ordered tree data structure to hold
@@ -126,6 +122,10 @@ public class IntervalTree<O extends Object> {
 	 */
 	public IntervalData<O> query(final long start, final long end) {
 		return root.query(start, end);
+	}
+
+	public List<IntervalData<O>> queryIntersectedElements(final long start, final long end) {
+		return root.queryIntersectedElements(start, end);
 	}
 
 	/**
@@ -334,7 +334,7 @@ public class IntervalTree<O extends Object> {
 
 		private long start = Long.MIN_VALUE;
 		private long end = Long.MAX_VALUE;
-		private Set<O> set = new TreeSet<O>(); // Sorted
+		private O object = null;
 
 		/**
 		 * Interval data using O as it's unique identifier
@@ -345,7 +345,7 @@ public class IntervalTree<O extends Object> {
 		public IntervalData(final long index, final O object) {
 			this.start = index;
 			this.end = index;
-			this.set.add(object);
+			this.object = object;
 		}
 
 		/**
@@ -357,32 +357,11 @@ public class IntervalTree<O extends Object> {
 		public IntervalData(final long start, final long end, final O object) {
 			this.start = start;
 			this.end = end;
-			this.set.add(object);
+			this.object = object;
 		}
 
-		/**
-		 * Interval data list which should all be unique
-		 * 
-		 * @param list
-		 *            of interval data objects
-		 */
-		public IntervalData(final long start, final long end, final Set<O> set) {
-			this.start = start;
-			this.end = end;
-			this.set = set;
-
-			// Make sure they are unique
-			final Iterator<O> iter = set.iterator();
-			while (iter.hasNext()) {
-				final O obj1 = iter.next();
-				O obj2 = null;
-				if (iter.hasNext()) {
-					obj2 = iter.next();
-				}
-				if (obj1.equals(obj2)) {
-					throw new InvalidParameterException("Each interval data in the list must be unique.");
-				}
-			}
+		public O getObject() {
+			return object;
 		}
 
 		/**
@@ -391,7 +370,7 @@ public class IntervalTree<O extends Object> {
 		public void clear() {
 			this.start = Long.MIN_VALUE;
 			this.end = Long.MAX_VALUE;
-			this.set.clear();
+			this.object = null;
 		}
 
 		/**
@@ -408,7 +387,7 @@ public class IntervalTree<O extends Object> {
 			if (data.end > this.end) {
 				this.end = data.end;
 			}
-			this.set.addAll(data.set);
+			this.object = data.object;
 			return this;
 		}
 
@@ -418,9 +397,7 @@ public class IntervalTree<O extends Object> {
 		 * @return deep copy.
 		 */
 		public IntervalData<O> copy() {
-			final Set<O> listCopy = new TreeSet<O>();
-			listCopy.addAll(set);
-			return new IntervalData<O>(start, end, listCopy);
+			return new IntervalData<O>(start, end, object);
 		}
 
 		/**
@@ -470,13 +447,8 @@ public class IntervalTree<O extends Object> {
 			@SuppressWarnings("unchecked")
 			final IntervalData<O> data = (IntervalData<O>) obj;
 			if (this.start == data.start && this.end == data.end) {
-				if (this.set.size() != data.set.size()) {
+				if (!this.object.equals(data.object)) {
 					return false;
-				}
-				for (final O o : set) {
-					if (!data.set.contains(o)) {
-						return false;
-					}
 				}
 				return true;
 			}
@@ -504,12 +476,8 @@ public class IntervalTree<O extends Object> {
 		public String toString() {
 			final StringBuilder builder = new StringBuilder();
 			builder.append(start).append("->").append(end);
-			builder.append(" set=").append(set);
+			builder.append(" object=").append(object);
 			return builder.toString();
 		}
-	}
-
-	public List<IntervalData<O>> queryIntersectedElements(final long start, final long end) {
-		return root.queryIntersectedElements(start, end);
 	}
 }

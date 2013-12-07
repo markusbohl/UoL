@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 import java.util.Arrays;
 import java.util.List;
@@ -72,8 +73,7 @@ public class IntervalTreeTest {
 		final IntervalData<String> data6 = data(15, 20, "VWXYZ");
 		final List<IntervalData<String>> dataList = intervalDataList(data1, data2, data3, data4, data5, data6);
 
-		return $($(dataList, 0L, 20L, new IntervalData[] { data1, data2, data3, data4, data5, data6 }),
-				$(dataList, 0L, 10L, new IntervalData[] { data1, data2, data3, data4 }),
+		return $($(dataList, 0L, 10L, new IntervalData[] { data1, data2, data3, data4 }),
 				$(dataList, 12L, 20L, new IntervalData[] { data3, data5, data6 }),
 				$(dataList, 8L, 12L, new IntervalData[] { data3, data4 }),
 				$(dataList, 0L, 20L, new IntervalData[] { data1, data2, data3, data4, data5, data6 }));
@@ -86,5 +86,16 @@ public class IntervalTreeTest {
 	@SafeVarargs
 	private final List<IntervalData<String>> intervalDataList(final IntervalData<String>... intervalData) {
 		return Arrays.asList(intervalData);
+	}
+
+	@Test
+	public void getIntervalDataValue() {
+		final String value = "0123456789";
+		final IntervalData<String> intervalData = data(5, 15, value);
+		final IntervalTree<String> intervalTree = new IntervalTree<>(intervalDataList(intervalData));
+
+		final List<IntervalData<String>> result = intervalTree.queryIntersectedElements(5, 15);
+
+		assertThat(result.get(0).getObject(), is(value));
 	}
 }

@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import datastructure.ReferenceIndexStructure;
 import entity.ReferenceSequenceSection;
+import entity.ReferencedSectionWithOffset;
 import entity.SectionWithOffset;
 import entity.SequenceSection;
 
@@ -17,7 +18,7 @@ public class CompressedSequenceParser {
 	private static final int MIN_OFFSET_TO_END_OF_RM_ENTRY = 3;
 	private final ReferenceIndexStructure indexStructure;
 	private final List<SectionWithOffset> rawEntries = new LinkedList<>();
-	private final List<SectionWithOffset> relativeMatchEntries = new LinkedList<>();
+	private final List<ReferencedSectionWithOffset> relativeMatchEntries = new LinkedList<>();
 	private final List<SectionWithOffset> allEntries = new LinkedList<>();
 
 	@Inject
@@ -73,7 +74,7 @@ public class CompressedSequenceParser {
 		return rawEntries;
 	}
 
-	public List<SectionWithOffset> getRelativeMatchEntries() {
+	public List<ReferencedSectionWithOffset> getRelativeMatchEntries() {
 		return relativeMatchEntries;
 	}
 

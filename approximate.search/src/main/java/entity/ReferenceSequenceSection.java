@@ -2,12 +2,12 @@ package entity;
 
 import datastructure.ReferenceIndexStructure;
 
-public class ReferenceSequenceSection implements SectionWithOffset {
+public class ReferenceSequenceSection implements ReferencedSectionWithOffset {
 
 	private final ReferenceIndexStructure indexStructure;
 	private final int offset;
-	private final int refLength;
 	private final int refIndex;
+	private final int refLength;
 
 	public ReferenceSequenceSection(final int offset, final ReferenceIndexStructure indexStructure, final int refIndex,
 			final int refLength) {
@@ -15,6 +15,11 @@ public class ReferenceSequenceSection implements SectionWithOffset {
 		this.indexStructure = indexStructure;
 		this.refIndex = refIndex;
 		this.refLength = refLength;
+	}
+
+	@Override
+	public int getRefIndex() {
+		return refIndex;
 	}
 
 	@Override

@@ -10,7 +10,7 @@ import preparation.NeighborhoodIdentifier;
 import preparation.ReferenceFilter;
 import preparation.SectionsProvider;
 import preparation.SectionsProviderFactory;
-import datastructure.ReferenceIndexStructure;
+import entity.ReferencedSectionWithOffset;
 import entity.Section;
 import entity.SectionWithOffset;
 
@@ -21,17 +21,15 @@ public class CompressedSequenceSearchAlgorithm implements ApproximateSearchAlgor
 	private final NeighborhoodIdentifier neighborhoodIdentifier;
 	private final ReferenceFilter referenceFilter;
 	private SectionsProvider sectionsProvider;
-	private final ReferenceIndexStructure indexStructure;
 
 	@Inject
 	CompressedSequenceSearchAlgorithm(final ApproximateMatcher approximateMatcher,
 			final SectionsProviderFactory sectionsProviderFactory, final NeighborhoodIdentifier neighborhoodIdentifier,
-			final ReferenceFilter referenceFilter, final ReferenceIndexStructure indexStructure) {
+			final ReferenceFilter referenceFilter) {
 		this.sectionsProviderFactory = sectionsProviderFactory;
 		this.neighborhoodIdentifier = neighborhoodIdentifier;
 		this.referenceFilter = referenceFilter;
 		this.approximateMatcher = approximateMatcher;
-		this.indexStructure = indexStructure;
 	}
 
 	@Override
@@ -42,34 +40,20 @@ public class CompressedSequenceSearchAlgorithm implements ApproximateSearchAlgor
 
 		final int minLength = pattern.length() - allowedErrors;
 		final List<Section> neighborhoodAreas = neighborhoodIdentifier.identifiyAreasFor(pattern, allowedErrors);
-		final List<SectionWithOffset> referencedSections = sectionsProvider.getRelativeMatchEntries();
-		final List<Section> filteredSections = referenceFilter.filter(referencedSections, neighborhoodAreas, minLength);
+		final List<ReferencedSectionWithOffset> referencedSections = sectionsProvider.getRelativeMatchEntries();
+		final List<ReferencedSectionWithOffset> filteredSections = referenceFilter.filter(referencedSections,
+				neighborhoodAreas, minLength);
 		final List<SectionWithOffset> rawEntries = sectionsProvider.getRawEntries();
 		final List<SectionWithOffset> overlappingAreas = sectionsProvider.getOverlappingAreas();
 
-		matchingPositions.addAll(matchesInReferenceSections(filteredSections, pattern, allowedErrors));
+		matchingPositions.addAll(matchesInSections(filteredSections, pattern, allowedErrors));
 		matchingPositions.addAll(matchesInSections(rawEntries, pattern, allowedErrors));
 		matchingPositions.addAll(matchesInSections(overlappingAreas, pattern, allowedErrors));
 
 		return matchingPositions;
 	}
 
-	private List<Integer> matchesInReferenceSections(final List<Section> sections, final String pattern,
-			final int allowedErrors) {
-		final List<Integer> matchingPositions = new LinkedList<>();
-
-		for (final Section section : sections) {
-			final int startIndex = section.getStartIndex();
-			final int length = section.getEndIndex() - startIndex;
-			final String text = indexStructure.substring(startIndex, length);
-
-			matchingPositions.addAll(matchesInSection(text, pattern, allowedErrors, startIndex));
-		}
-
-		return matchingPositions;
-	}
-
-	private List<Integer> matchesInSections(final List<SectionWithOffset> sections, final String pattern,
+	private List<Integer> matchesInSections(final List<? extends SectionWithOffset> sections, final String pattern,
 			final int allowedErrors) {
 		final List<Integer> matchingPositions = new LinkedList<>();
 

@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 
 import datastructure.ReferenceIndexStructure;
 import entity.ReferenceSequenceSection;
+import entity.ReferencedSectionWithOffset;
 import entity.SectionWithOffset;
 import entity.SequenceSection;
 
@@ -28,7 +29,7 @@ public class SectionsProviderTest {
 
 	private SectionWithOffset seqSection;
 
-	private SectionWithOffset refSeqSection;
+	private ReferencedSectionWithOffset refSeqSection;
 
 	private SectionWithOffset overlappingArea;
 
@@ -79,7 +80,7 @@ public class SectionsProviderTest {
 
 	@Test
 	public void getRelativeMatchEntries() {
-		final List<SectionWithOffset> relMatchEntries = sectionsProvider.getRelativeMatchEntries();
+		final List<ReferencedSectionWithOffset> relMatchEntries = sectionsProvider.getRelativeMatchEntries();
 
 		assertThat(relMatchEntries, hasSize(1));
 		assertThat(relMatchEntries, hasItem(refSeqSection));
