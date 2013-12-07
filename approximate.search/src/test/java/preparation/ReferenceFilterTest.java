@@ -98,7 +98,7 @@ public class ReferenceFilterTest {
 	}
 
 	Object[] parametersForAdjustOffset() {
-		return $($(new Section(20, 30), 20, 10, 89));// , $(new Section(25, 40), 25, 10, 94));
+		return $($(new Section(20, 30), 20, 10, 89), $(new Section(25, 40), 25, 10, 94));
 	}
 
 	@Test

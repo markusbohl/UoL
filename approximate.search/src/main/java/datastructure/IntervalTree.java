@@ -293,7 +293,7 @@ public class IntervalTree<O extends Object> {
 			final List<IntervalData<O>> intersectedElements = new LinkedList<>();
 			for (final IntervalData<O> data : overlap) {
 				if (data.start >= end || data.end <= start) {
-					break;
+					continue;
 				}
 				final IntervalData<O> temp = data.query(start, end);
 				if (temp != null) {

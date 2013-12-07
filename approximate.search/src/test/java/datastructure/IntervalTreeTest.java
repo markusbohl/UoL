@@ -22,9 +22,20 @@ import datastructure.IntervalTree.IntervalData;
 public class IntervalTreeTest {
 
 	@Test
+	public void getObject() {
+		final String object = "0123456789";
+		final IntervalData<String> intervalData = data(5, 15, object);
+		final IntervalTree<String> intervalTree = new IntervalTree<>(intervalDataList(intervalData));
+
+		final List<IntervalData<String>> result = intervalTree.queryIntersectedElements(5, 15);
+
+		assertThat(result.get(0).getObject(), is(object));
+	}
+
+	@Test
 	@Parameters
-	public void findIntersectedElements(final long start, final long end) throws Exception {
-		final IntervalData<String> intervalData = data(5, 15, "0123456789");
+	public void findIntersectedElements(final IntervalData<String> intervalData, final long start, final long end)
+			throws Exception {
 		final IntervalTree<String> intervalTree = new IntervalTree<>(intervalDataList(intervalData));
 
 		final List<IntervalData<String>> intersectedElements = intervalTree.queryIntersectedElements(start, end);
@@ -34,7 +45,9 @@ public class IntervalTreeTest {
 	}
 
 	Object[] parametersForFindIntersectedElements() {
-		return $($(0L, 10L), $(5L, 15L), $(10L, 20L), $(8L, 12L), $(0L, 20L));
+		final IntervalData<String> intervalData = data(5, 15, "0123456789");
+		return $($(intervalData, 0L, 10L), $(intervalData, 5L, 15L), $(intervalData, 10L, 20L),
+				$(intervalData, 8L, 12L), $(intervalData, 0L, 20L));
 	}
 
 	@Test
@@ -71,12 +84,17 @@ public class IntervalTreeTest {
 		final IntervalData<String> data4 = data(8, 12, "89abc");
 		final IntervalData<String> data5 = data(13, 17, "ABCD");
 		final IntervalData<String> data6 = data(15, 20, "VWXYZ");
-		final List<IntervalData<String>> dataList = intervalDataList(data1, data2, data3, data4, data5, data6);
+		final IntervalData<String> data7 = data(5, 25, "01234567890123456789");
+		final IntervalData<String> data8 = data(15, 35, "01234567890123456789");
 
-		return $($(dataList, 0L, 10L, new IntervalData[] { data1, data2, data3, data4 }),
-				$(dataList, 12L, 20L, new IntervalData[] { data3, data5, data6 }),
-				$(dataList, 8L, 12L, new IntervalData[] { data3, data4 }),
-				$(dataList, 0L, 20L, new IntervalData[] { data1, data2, data3, data4, data5, data6 }));
+		final List<IntervalData<String>> dataList1 = intervalDataList(data1, data2, data3, data4, data5, data6);
+		final List<IntervalData<String>> dataList2 = intervalDataList(data7, data8);
+
+		return $($(dataList1, 0L, 10L, new IntervalData[] { data1, data2, data3, data4 }),
+				$(dataList1, 12L, 20L, new IntervalData[] { data3, data5, data6 }),
+				$(dataList1, 8L, 12L, new IntervalData[] { data3, data4 }),
+				$(dataList1, 0L, 20L, new IntervalData[] { data1, data2, data3, data4, data5, data6 }),
+				$(dataList2, 25L, 40L, new IntervalData[] { data8 }));
 	}
 
 	private final IntervalData<String> data(final int start, final int end, final String value) {
@@ -86,16 +104,5 @@ public class IntervalTreeTest {
 	@SafeVarargs
 	private final List<IntervalData<String>> intervalDataList(final IntervalData<String>... intervalData) {
 		return Arrays.asList(intervalData);
-	}
-
-	@Test
-	public void getIntervalDataValue() {
-		final String value = "0123456789";
-		final IntervalData<String> intervalData = data(5, 15, value);
-		final IntervalTree<String> intervalTree = new IntervalTree<>(intervalDataList(intervalData));
-
-		final List<IntervalData<String>> result = intervalTree.queryIntersectedElements(5, 15);
-
-		assertThat(result.get(0).getObject(), is(value));
 	}
 }
