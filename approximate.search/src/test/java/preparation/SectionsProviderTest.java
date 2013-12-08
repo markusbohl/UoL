@@ -42,7 +42,7 @@ public class SectionsProviderTest {
 	@Mock
 	private StringProvider provider;
 	@Mock
-	private OverlappingAreaBuilder overlappingAreaBuilder;
+	private OverlapBuilder overlapBuilder;
 	@Mock
 	private ReferenceIndexStructure indexStructure;
 
@@ -61,16 +61,16 @@ public class SectionsProviderTest {
 		when(parser.getAllEntries()).thenReturn(sequenceSections);
 		when(parser.getRawEntries()).thenReturn(Arrays.asList(seqSection));
 		when(parser.getRelativeMatchEntries()).thenReturn(Arrays.asList(refSeqSection));
-		when(overlappingAreaBuilder.getOverlappingAreas()).thenReturn(Arrays.asList(overlappingArea));
+		when(overlapBuilder.getOverlappingAreas()).thenReturn(Arrays.asList(overlappingArea));
 
-		sectionsProvider = new SectionsProvider(provider, parser, overlappingAreaBuilder, patternLength, allowedErrors);
+		sectionsProvider = new SectionsProvider(provider, parser, overlapBuilder, patternLength, allowedErrors);
 	}
 
 	@Test
 	public void testInitialization() {
-		final InOrder inOrder = Mockito.inOrder(parser, overlappingAreaBuilder);
+		final InOrder inOrder = Mockito.inOrder(parser, overlapBuilder);
 		inOrder.verify(parser).parse("RM(2,10)R(ATAGAC");
-		inOrder.verify(overlappingAreaBuilder).feed(sequenceSections, 5, allowedErrors);
+		inOrder.verify(overlapBuilder).feed(sequenceSections, 5, allowedErrors);
 	}
 
 	@Test

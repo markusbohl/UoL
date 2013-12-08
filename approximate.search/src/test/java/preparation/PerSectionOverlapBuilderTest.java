@@ -13,13 +13,13 @@ import org.junit.Test;
 import entity.SectionWithOffset;
 import entity.SequenceSection;
 
-public class OverlappingAreaBuilderTest {
+public class PerSectionOverlapBuilderTest {
 
-	private OverlappingAreaBuilder sectionsProvider;
+	private OverlapBuilder sectionsProvider;
 
 	@Before
 	public void setUp() throws Exception {
-		sectionsProvider = new OverlappingAreaBuilder();
+		sectionsProvider = new PerSectionOverlapBuilder();
 	}
 
 	@Test

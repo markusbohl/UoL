@@ -6,14 +6,16 @@ import java.util.List;
 import entity.SectionWithOffset;
 import entity.SequenceSection;
 
-public class OverlappingAreaBuilder {
+public class PerSectionOverlapBuilder implements OverlapBuilder {
 
 	private final List<SectionWithOffset> overlappingAreas = new LinkedList<>();
 
+	@Override
 	public List<SectionWithOffset> getOverlappingAreas() {
 		return overlappingAreas;
 	}
 
+	@Override
 	public void feed(final List<SectionWithOffset> sequenceSections, final int patternLength, final int allowedErrors) {
 		final int lengthPerSection = patternLength + allowedErrors - 1;
 
