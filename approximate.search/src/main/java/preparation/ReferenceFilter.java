@@ -62,7 +62,7 @@ public class ReferenceFilter {
 
 	private boolean intersected(final int sectionStartIndex, final int sectionEndIndex, final int refStartIndex,
 			final int refEndIndex) {
-		return refStartIndex <= sectionEndIndex && sectionStartIndex <= refEndIndex;
+		return refStartIndex < sectionEndIndex && refEndIndex > sectionStartIndex;
 	}
 
 	private IntervalTree<ReferencedSectionWithOffset> buildIntervalTreeFor(

@@ -53,7 +53,22 @@ public class ReferenceFilterTest {
 	}
 
 	@Test
-	public void filter() {
+	public void ignoreNonIntersectingSections() {
+		final Section potentialMatchSection1 = new Section(0, 4);
+		final Section potentialMatchSection2 = new Section(0, 5);
+		final Section potentialMatchSection3 = new Section(35, 45);
+		final Section potentialMatchSection4 = new Section(36, 45);
+		final List<Section> potentialMatchSections = Arrays.asList(potentialMatchSection1, potentialMatchSection2,
+				potentialMatchSection3, potentialMatchSection4);
+
+		final List<ReferencedSectionWithOffset> filterSections = filter.filter(referencedSections,
+				potentialMatchSections, 6);
+
+		assertThat(filterSections, is(empty()));
+	}
+
+	@Test
+	public void considerIntersectingSections() {
 		final Section potentialMatchSection = new Section(5, 15);
 		final List<Section> potentialMatchSections = Arrays.asList(potentialMatchSection);
 

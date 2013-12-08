@@ -14,6 +14,7 @@ public class PreparationModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		Names.bindProperties(binder(), getProperties());
+		bind(ReferenceFilter.class);
 		bind(OverlappingAreaBuilder.class);
 		bind(CompressedSequenceParser.class);
 		bind(Partitioner.class).to(NonOverlappingPartitioner.class);
