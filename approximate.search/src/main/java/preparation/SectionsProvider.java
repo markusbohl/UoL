@@ -18,14 +18,14 @@ public class SectionsProvider {
 
 	@Inject
 	SectionsProvider(@Named("compressed.sequence") final StringProvider provider,
-			final CompressedSequenceParser parser, final OverlappingAreaBuilder overlappingStringBuilder,
-			@Assisted final int patternLength) {
+			final CompressedSequenceParser parser, final OverlappingAreaBuilder overlappingAreaBuilder,
+			@Assisted final int patternLength, @Assisted final int allowedErrors) {
 		parser.parse(provider.provide());
-		overlappingStringBuilder.feed(parser.getAllEntries(), patternLength);
+		overlappingAreaBuilder.feed(parser.getAllEntries(), patternLength, allowedErrors);
 
 		rawEntries = parser.getRawEntries();
 		relativeMatchEntries = parser.getRelativeMatchEntries();
-		overlappingAreas = overlappingStringBuilder.getOverlappingAreas();
+		overlappingAreas = overlappingAreaBuilder.getOverlappingAreas();
 	}
 
 	public List<SectionWithOffset> getRawEntries() {

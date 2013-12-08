@@ -2,5 +2,5 @@ package preparation;
 
 public interface SectionsProviderFactory {
 
-	SectionsProvider createSectionsProviderFor(int patternLength);
+	SectionsProvider createSectionsProviderFor(int patternLength, int allowedErrors);
 }

@@ -59,7 +59,7 @@ public class CompressedSequenceSearchAlgorithmTest {
 	@Before
 	public void setUp() throws Exception {
 		initMocks(this);
-		when(sectionsProviderFactory.createSectionsProviderFor(anyInt())).thenReturn(sectionProvider);
+		when(sectionsProviderFactory.createSectionsProviderFor(anyInt(), anyInt())).thenReturn(sectionProvider);
 		when(section1.getContent()).thenReturn("content1");
 		when(section1.getOffset()).thenReturn(23);
 		when(section2.getContent()).thenReturn("content2");
@@ -77,7 +77,7 @@ public class CompressedSequenceSearchAlgorithmTest {
 	public void createSectionsProviderForGivenPatternLength() {
 		algorithm.search(PATTERN, ALLOWED_ERRORS);
 
-		verify(sectionsProviderFactory).createSectionsProviderFor(PATTERN.length());
+		verify(sectionsProviderFactory).createSectionsProviderFor(PATTERN.length(), ALLOWED_ERRORS);
 	}
 
 	@Test

@@ -25,18 +25,19 @@ public class OverlappingAreaBuilderTest {
 	@Test
 	public void getOverlappingAreas() {
 		final SectionWithOffset section1 = new SequenceSection(0, "abcd");
-		final SectionWithOffset section2 = new SequenceSection(4, "1234");
-		final SectionWithOffset section3 = new SequenceSection(8, "efgh");
+		final SectionWithOffset section2 = new SequenceSection(4, "123456789");
+		final SectionWithOffset section3 = new SequenceSection(13, "efgh");
 		final int patternLength = 3;
+		final int allowedErrors = 1;
 
-		sectionsProvider.feed(Arrays.asList(section1, section2, section3), patternLength);
+		sectionsProvider.feed(Arrays.asList(section1, section2, section3), patternLength, allowedErrors);
 		final List<SectionWithOffset> overlappingAreas = sectionsProvider.getOverlappingAreas();
 
 		assertThat(overlappingAreas, hasSize(2));
-		assertThat(overlappingAreas.get(0).getContent(), is("cd12"));
-		assertThat(overlappingAreas.get(0).getOffset(), is(2));
-		assertThat(overlappingAreas.get(1).getContent(), is("34ef"));
-		assertThat(overlappingAreas.get(1).getOffset(), is(6));
+		assertThat(overlappingAreas.get(0).getContent(), is("bcd123"));
+		assertThat(overlappingAreas.get(0).getOffset(), is(1));
+		assertThat(overlappingAreas.get(1).getContent(), is("789efg"));
+		assertThat(overlappingAreas.get(1).getOffset(), is(10));
 	}
 
 	@Test
@@ -46,17 +47,18 @@ public class OverlappingAreaBuilderTest {
 		final SectionWithOffset section3 = new SequenceSection(8, "ijkl");
 		final SectionWithOffset section4 = new SequenceSection(12, "mnop");
 		final int patternLength = 6;
+		final int allowedErrors = 1;
 
-		sectionsProvider.feed(Arrays.asList(section1, section2, section3, section4), patternLength);
+		sectionsProvider.feed(Arrays.asList(section1, section2, section3, section4), patternLength, allowedErrors);
 		final List<SectionWithOffset> overlappingAreas = sectionsProvider.getOverlappingAreas();
 
 		assertThat(overlappingAreas, hasSize(3));
 
 		assertThat(overlappingAreas.get(0).getContent(), is("abcdefghij"));
 		assertThat(overlappingAreas.get(0).getOffset(), is(0));
-		assertThat(overlappingAreas.get(1).getContent(), is("defghijklm"));
-		assertThat(overlappingAreas.get(1).getOffset(), is(3));
-		assertThat(overlappingAreas.get(2).getContent(), is("hijklmnop"));
-		assertThat(overlappingAreas.get(2).getOffset(), is(7));
+		assertThat(overlappingAreas.get(1).getContent(), is("cdefghijklmn"));
+		assertThat(overlappingAreas.get(1).getOffset(), is(2));
+		assertThat(overlappingAreas.get(2).getContent(), is("ghijklmnop"));
+		assertThat(overlappingAreas.get(2).getOffset(), is(6));
 	}
 }

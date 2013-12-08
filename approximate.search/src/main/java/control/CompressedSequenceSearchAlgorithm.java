@@ -35,14 +35,15 @@ public class CompressedSequenceSearchAlgorithm implements ApproximateSearchAlgor
 	@Override
 	public List<Integer> search(final String pattern, final int allowedErrors) {
 		final List<Integer> matchingPositions = new LinkedList<>();
+		final int patternLength = pattern.length();
+		final int minSectionLength = patternLength - allowedErrors;
 
-		sectionsProvider = sectionsProviderFactory.createSectionsProviderFor(pattern.length());
+		sectionsProvider = sectionsProviderFactory.createSectionsProviderFor(patternLength, allowedErrors);
 
-		final int minLength = pattern.length() - allowedErrors;
 		final List<Section> neighborhoodAreas = neighborhoodIdentifier.identifiyAreasFor(pattern, allowedErrors);
 		final List<ReferencedSectionWithOffset> referencedSections = sectionsProvider.getRelativeMatchEntries();
 		final List<ReferencedSectionWithOffset> filteredSections = referenceFilter.filter(referencedSections,
-				neighborhoodAreas, minLength);
+				neighborhoodAreas, minSectionLength);
 		final List<SectionWithOffset> rawEntries = sectionsProvider.getRawEntries();
 		final List<SectionWithOffset> overlappingAreas = sectionsProvider.getOverlappingAreas();
 

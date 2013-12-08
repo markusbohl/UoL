@@ -27,6 +27,8 @@ public class SectionsProviderTest {
 
 	private int patternLength;
 
+	private int allowedErrors;
+
 	private SectionWithOffset seqSection;
 
 	private ReferencedSectionWithOffset refSeqSection;
@@ -40,7 +42,7 @@ public class SectionsProviderTest {
 	@Mock
 	private StringProvider provider;
 	@Mock
-	private OverlappingAreaBuilder overlappingStringBuilder;
+	private OverlappingAreaBuilder overlappingAreaBuilder;
 	@Mock
 	private ReferenceIndexStructure indexStructure;
 
@@ -49,6 +51,7 @@ public class SectionsProviderTest {
 		initMocks(this);
 
 		patternLength = 5;
+		allowedErrors = 1;
 		seqSection = new SequenceSection(10, "ATAGAC");
 		refSeqSection = new ReferenceSequenceSection(0, indexStructure, 2, 10);
 		overlappingArea = new SequenceSection(8, "AGACGGTT");
@@ -58,16 +61,16 @@ public class SectionsProviderTest {
 		when(parser.getAllEntries()).thenReturn(sequenceSections);
 		when(parser.getRawEntries()).thenReturn(Arrays.asList(seqSection));
 		when(parser.getRelativeMatchEntries()).thenReturn(Arrays.asList(refSeqSection));
-		when(overlappingStringBuilder.getOverlappingAreas()).thenReturn(Arrays.asList(overlappingArea));
+		when(overlappingAreaBuilder.getOverlappingAreas()).thenReturn(Arrays.asList(overlappingArea));
 
-		sectionsProvider = new SectionsProvider(provider, parser, overlappingStringBuilder, patternLength);
+		sectionsProvider = new SectionsProvider(provider, parser, overlappingAreaBuilder, patternLength, allowedErrors);
 	}
 
 	@Test
 	public void testInitialization() {
-		final InOrder inOrder = Mockito.inOrder(parser, overlappingStringBuilder);
+		final InOrder inOrder = Mockito.inOrder(parser, overlappingAreaBuilder);
 		inOrder.verify(parser).parse("RM(2,10)R(ATAGAC");
-		inOrder.verify(overlappingStringBuilder).feed(sequenceSections, 5);
+		inOrder.verify(overlappingAreaBuilder).feed(sequenceSections, 5, allowedErrors);
 	}
 
 	@Test
