@@ -3,18 +3,13 @@ package preparation;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
-import datastructure.ReferenceIndexStructure;
 import entity.SectionWithOffset;
 import entity.SequenceSection;
 
@@ -22,14 +17,9 @@ public class OverlappingAreaBuilderTest {
 
 	private OverlappingAreaBuilder sectionsProvider;
 
-	@Mock
-	private ReferenceIndexStructure indexStructure;
-
 	@Before
 	public void setUp() throws Exception {
-		initMocks(this);
 		sectionsProvider = new OverlappingAreaBuilder();
-		when(indexStructure.substring(anyInt(), anyInt())).thenReturn("");
 	}
 
 	@Test
