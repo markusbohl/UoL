@@ -45,6 +45,6 @@ public class ReferenceSequenceSection implements ReferencedSectionWithOffset {
 	@Override
 	public String getLastNCharacters(final int n) {
 		final int endIndex = refIndex + refLength;
-		return indexStructure.substring(endIndex - n, endIndex);
+		return indexStructure.substring(endIndex - n, n);
 	}
 }

@@ -45,7 +45,7 @@ public class ReferenceSequenceSectionTest {
 
 	@Test
 	public void getLastNCharactersDelegatesToIndexStructure() {
-		when(indexStructure.substring(5 + 17 - 4, 5 + 17)).thenReturn("tent");
+		when(indexStructure.substring(5 + 17 - 4, 4)).thenReturn("tent");
 
 		assertThat(sequenceSection.getLastNCharacters(4), is("tent"));
 	}
