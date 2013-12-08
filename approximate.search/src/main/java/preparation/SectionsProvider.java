@@ -19,7 +19,7 @@ public class SectionsProvider {
 	@Inject
 	SectionsProvider(@Named("compressed.sequence") final StringProvider provider,
 			final CompressedSequenceParser parser, final OverlapBuilder overlapBuilder,
-			@Assisted final int patternLength, @Assisted final int allowedErrors) {
+			@Assisted("patternLength") final int patternLength, @Assisted("allowedErrors") final int allowedErrors) {
 		parser.parse(provider.provide());
 		overlapBuilder.feed(parser.getAllEntries(), patternLength, allowedErrors);
 

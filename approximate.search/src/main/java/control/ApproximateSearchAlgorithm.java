@@ -1,8 +1,8 @@
 package control;
 
-import java.util.List;
+import java.util.Set;
 
 public interface ApproximateSearchAlgorithm {
 
-	List<Integer> search(String pattern, int allowedErrors);
+	Set<Integer> search(String pattern, int allowedErrors);
 }

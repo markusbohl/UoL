@@ -11,6 +11,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import matcher.ApproximateMatcher;
 
@@ -104,7 +105,7 @@ public class CompressedSequenceSearchAlgorithmTest {
 		when(approximateMatcher.search("content1", PATTERN, ALLOWED_ERRORS, 23)).thenReturn(Arrays.asList(30));
 		when(approximateMatcher.search("content2", PATTERN, ALLOWED_ERRORS, 44)).thenReturn(Arrays.asList(50, 51));
 
-		final List<Integer> matchingPositions = algorithm.search(PATTERN, ALLOWED_ERRORS);
+		final Set<Integer> matchingPositions = algorithm.search(PATTERN, ALLOWED_ERRORS);
 
 		assertThat(matchingPositions, hasSize(3));
 		assertThat(matchingPositions, hasItems(30, 50, 51));
@@ -116,7 +117,7 @@ public class CompressedSequenceSearchAlgorithmTest {
 		when(approximateMatcher.search("content2", PATTERN, ALLOWED_ERRORS, 44)).thenReturn(Arrays.asList(50));
 		when(sectionProvider.getRawEntries()).thenReturn(Arrays.asList(section1, section2));
 
-		final List<Integer> matchingPositions = algorithm.search(PATTERN, ALLOWED_ERRORS);
+		final Set<Integer> matchingPositions = algorithm.search(PATTERN, ALLOWED_ERRORS);
 
 		assertThat(matchingPositions, hasSize(3));
 		assertThat(matchingPositions, hasItems(30, 40, 50));
@@ -128,7 +129,7 @@ public class CompressedSequenceSearchAlgorithmTest {
 		when(approximateMatcher.search("content2", PATTERN, ALLOWED_ERRORS, 44)).thenReturn(Arrays.asList(50));
 		when(sectionProvider.getOverlappingAreas()).thenReturn(Arrays.asList(section1, section2));
 
-		final List<Integer> matchingPositions = algorithm.search(PATTERN, ALLOWED_ERRORS);
+		final Set<Integer> matchingPositions = algorithm.search(PATTERN, ALLOWED_ERRORS);
 
 		assertThat(matchingPositions, hasSize(3));
 		assertThat(matchingPositions, hasItems(30, 40, 50));

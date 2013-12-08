@@ -2,6 +2,9 @@ package control;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -33,8 +36,8 @@ public class CompressedSequenceSearchAlgorithm implements ApproximateSearchAlgor
 	}
 
 	@Override
-	public List<Integer> search(final String pattern, final int allowedErrors) {
-		final List<Integer> matchingPositions = new LinkedList<>();
+	public Set<Integer> search(final String pattern, final int allowedErrors) {
+		final SortedSet<Integer> matchingPositions = new TreeSet<>();
 		final int patternLength = pattern.length();
 		final int minSectionLength = patternLength - allowedErrors;
 

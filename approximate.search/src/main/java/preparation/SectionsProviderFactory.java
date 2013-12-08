@@ -1,6 +1,9 @@
 package preparation;
 
+import com.google.inject.assistedinject.Assisted;
+
 public interface SectionsProviderFactory {
 
-	SectionsProvider createSectionsProviderFor(int patternLength, int allowedErrors);
+	SectionsProvider createSectionsProviderFor(@Assisted("patternLength") int patternLength,
+			@Assisted("allowedErrors") int allowedErrors);
 }
