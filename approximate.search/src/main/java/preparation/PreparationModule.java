@@ -17,7 +17,8 @@ public class PreparationModule extends AbstractModule {
 		bind(ReferenceFilter.class);
 		bind(CompressedSequenceParser.class);
 		bind(Partitioner.class).to(NonOverlappingPartitioner.class);
-		bind(OverlapBuilder.class).to(PerSectionOverlapBuilder.class);
+		bind(OverlapBuilder.class).to(RawSectionsIncludingOverlapBuilder.class);
+		// bind(OverlapBuilder.class).to(PerSectionOverlapBuilder.class);
 		bind(StringProvider.class).annotatedWith(Names.named("reference.sequence")).to(ReferenceSequenceProvider.class);
 		bind(BufferedReader.class).annotatedWith(Names.named("reference.sequence")).toProvider(
 				ReferenceSequenceFastaFileReaderProvider.class);
