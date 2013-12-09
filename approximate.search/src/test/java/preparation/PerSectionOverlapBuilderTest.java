@@ -15,11 +15,11 @@ import entity.SequenceSection;
 
 public class PerSectionOverlapBuilderTest {
 
-	private OverlapBuilder sectionsProvider;
+	private OverlapBuilder overlapBuilder;
 
 	@Before
 	public void setUp() throws Exception {
-		sectionsProvider = new PerSectionOverlapBuilder();
+		overlapBuilder = new PerSectionOverlapBuilder();
 	}
 
 	@Test
@@ -30,8 +30,8 @@ public class PerSectionOverlapBuilderTest {
 		final int patternLength = 3;
 		final int allowedErrors = 1;
 
-		sectionsProvider.feed(Arrays.asList(section1, section2, section3), patternLength, allowedErrors);
-		final List<SectionWithOffset> overlappingAreas = sectionsProvider.getOverlappingAreas();
+		overlapBuilder.feed(Arrays.asList(section1, section2, section3), patternLength, allowedErrors);
+		final List<SectionWithOffset> overlappingAreas = overlapBuilder.getOverlappingAreas();
 
 		assertThat(overlappingAreas, hasSize(2));
 		assertThat(overlappingAreas.get(0).getContent(), is("bcd123"));
@@ -49,8 +49,8 @@ public class PerSectionOverlapBuilderTest {
 		final int patternLength = 6;
 		final int allowedErrors = 1;
 
-		sectionsProvider.feed(Arrays.asList(section1, section2, section3, section4), patternLength, allowedErrors);
-		final List<SectionWithOffset> overlappingAreas = sectionsProvider.getOverlappingAreas();
+		overlapBuilder.feed(Arrays.asList(section1, section2, section3, section4), patternLength, allowedErrors);
+		final List<SectionWithOffset> overlappingAreas = overlapBuilder.getOverlappingAreas();
 
 		assertThat(overlappingAreas, hasSize(3));
 
@@ -60,5 +60,10 @@ public class PerSectionOverlapBuilderTest {
 		assertThat(overlappingAreas.get(1).getOffset(), is(2));
 		assertThat(overlappingAreas.get(2).getContent(), is("ghijklmnop"));
 		assertThat(overlappingAreas.get(2).getOffset(), is(6));
+	}
+
+	@Test
+	public void rawSectionsFullyIncluded() {
+		assertThat(overlapBuilder.rawSectionsFullyIncluded(), is(false));
 	}
 }

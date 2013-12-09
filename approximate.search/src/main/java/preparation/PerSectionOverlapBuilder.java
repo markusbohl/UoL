@@ -79,4 +79,9 @@ public class PerSectionOverlapBuilder implements OverlapBuilder {
 	private boolean isNotLastElement(final List<SectionWithOffset> sections, final int currentIndex) {
 		return currentIndex + 1 != sections.size();
 	}
+
+	@Override
+	public boolean rawSectionsFullyIncluded() {
+		return false;
+	}
 }

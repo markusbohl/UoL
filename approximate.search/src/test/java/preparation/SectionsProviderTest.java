@@ -1,7 +1,9 @@
 package preparation;
 
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -74,11 +76,22 @@ public class SectionsProviderTest {
 	}
 
 	@Test
-	public void getRawEntries() {
+	public void getRawEntriesWhenRawSectionsNotIncludedInOverlapAreas() {
 		final List<SectionWithOffset> rawEntries = sectionsProvider.getRawEntries();
 
 		assertThat(rawEntries, hasSize(1));
 		assertThat(rawEntries, hasItem(seqSection));
+	}
+
+	@Test
+	public void getEmptyListWhenRawSectionsFullyIncludedInOverlapAreas() {
+		when(overlapBuilder.rawSectionsFullyIncluded()).thenReturn(true);
+		final SectionsProvider secProvider = new SectionsProvider(provider, parser, overlapBuilder, patternLength,
+				allowedErrors);
+
+		final List<SectionWithOffset> rawEntries = secProvider.getRawEntries();
+
+		assertThat(rawEntries, is(empty()));
 	}
 
 	@Test

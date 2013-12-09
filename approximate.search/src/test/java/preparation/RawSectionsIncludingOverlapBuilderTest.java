@@ -168,4 +168,9 @@ public class RawSectionsIncludingOverlapBuilderTest {
 			assertThat(actual.getLength(), is(expected.getLength()));
 		}
 	}
+
+	@Test
+	public void rawSectionsFullyIncluded() {
+		assertThat(overlapBuilder.rawSectionsFullyIncluded(), is(true));
+	}
 }

@@ -86,4 +86,9 @@ public class RawSectionsIncludingOverlapBuilder implements OverlapBuilder {
 	private boolean isLastSection(final List<SectionWithOffset> sections, final int currentIndex) {
 		return currentIndex == sections.size() - 1;
 	}
+
+	@Override
+	public boolean rawSectionsFullyIncluded() {
+		return true;
+	}
 }

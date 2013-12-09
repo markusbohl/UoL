@@ -1,5 +1,6 @@
 package preparation;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,12 +21,26 @@ public class SectionsProvider {
 	SectionsProvider(@Named("compressed.sequence") final StringProvider provider,
 			final CompressedSequenceParser parser, final OverlapBuilder overlapBuilder,
 			@Assisted("patternLength") final int patternLength, @Assisted("allowedErrors") final int allowedErrors) {
+
+		init(provider, parser, overlapBuilder, patternLength, allowedErrors);
+
+		overlappingAreas = overlapBuilder.getOverlappingAreas();
+		relativeMatchEntries = parser.getRelativeMatchEntries();
+		rawEntries = determineRawEntries(parser, overlapBuilder.rawSectionsFullyIncluded());
+	}
+
+	private void init(final StringProvider provider, final CompressedSequenceParser parser,
+			final OverlapBuilder overlapBuilder, final int patternLength, final int allowedErrors) {
 		parser.parse(provider.provide());
 		overlapBuilder.feed(parser.getAllEntries(), patternLength, allowedErrors);
+	}
 
-		rawEntries = parser.getRawEntries();
-		relativeMatchEntries = parser.getRelativeMatchEntries();
-		overlappingAreas = overlapBuilder.getOverlappingAreas();
+	private List<SectionWithOffset> determineRawEntries(final CompressedSequenceParser parser,
+			final boolean rawSectionInOverlappingAreas) {
+		if (rawSectionInOverlappingAreas) {
+			return Collections.emptyList();
+		}
+		return parser.getRawEntries();
 	}
 
 	public List<SectionWithOffset> getRawEntries() {
