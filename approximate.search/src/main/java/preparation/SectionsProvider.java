@@ -18,11 +18,11 @@ public class SectionsProvider {
 	private final List<ReferencedSectionWithOffset> relativeMatchEntries;
 
 	@Inject
-	SectionsProvider(@Named("compressed.sequence") final StringProvider provider,
+	SectionsProvider(@Named("compressed.sequence") final StringProvider stringProvider,
 			final CompressedSequenceParser parser, final OverlapBuilder overlapBuilder,
 			@Assisted("patternLength") final int patternLength, @Assisted("allowedErrors") final int allowedErrors) {
 
-		init(provider, parser, overlapBuilder, patternLength, allowedErrors);
+		init(stringProvider, parser, overlapBuilder, patternLength, allowedErrors);
 
 		overlappingAreas = overlapBuilder.getOverlappingAreas();
 		relativeMatchEntries = parser.getRelativeMatchEntries();
