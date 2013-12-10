@@ -110,14 +110,18 @@ public class RawSectionsIncludingOverlapBuilderTest {
 						patternLength, allowedErrors, listOf(rawSection(0, "12345abcdeABCDE"))),
 
 				$(listOf(rawSection(0, "12"), rawSection(2, "ab"), refSection(4, "ABC", overlap)), patternLength,
-						allowedErrors, listOf(rawSection(0, "12abABC")))
+						allowedErrors, listOf(rawSection(0, "12abABC"))),
 
-		// $(listOf(rawSection(0, "12345"), rawSection(5, "abcde"), refSection(10, "ABC", overlap),
-		// rawSection(13, "zzzzz"), rawSection(18, "00000")), patternLength, allowedErrors,
-		// listOf(rawSection(0, "12345abcdeABCzzzzz00000"))),
-		//
-		// $(listOf(refSection(0, "12345", overlap), refSection(5, "abcde", overlap), rawSection(10, "ABCD")),
-		// patternLength, allowedErrors, listOf(rawSection(0, "12345abcdeABCD")))//
+				$(listOf(rawSection(0, "12345"), rawSection(5, "abcde"), refSection(10, "ABC", overlap),
+						rawSection(13, "zzzzz"), rawSection(18, "00000")), patternLength, allowedErrors,
+						listOf(rawSection(0, "12345abcdeABCzzz"), rawSection(7, "cdeABCzzzzz00000"))),
+
+				$(listOf(refSection(0, "12345", overlap), refSection(5, "abcde", overlap), rawSection(10, "ABCD")),
+						patternLength, allowedErrors, listOf(rawSection(0, "12345abcdeA"), rawSection(4, "5abcdeABCD"))),//
+
+				$(listOf(refSection(0, "12345", overlap), refSection(5, "abcde", overlap),
+						rawSection(10, "ABCDEFGHIJ"), refSection(20, "zzzzz", overlap)), patternLength, allowedErrors,
+						listOf(rawSection(0, "12345abcdeA"), rawSection(4, "5abcdeABCDEFGHIJzzzzz")))//
 		);
 	}
 
@@ -134,7 +138,7 @@ public class RawSectionsIncludingOverlapBuilderTest {
 		when(refSection.getContent()).thenReturn(content);
 		when(refSection.getOffset()).thenReturn(offset);
 		when(refSection.getLength()).thenReturn(content.length());
-		for (int i = 1; i <= overlap; i++) {
+		for (int i = 0; i <= overlap; i++) {
 			when(refSection.getFirstNCharacters(i)).thenReturn(firstNCharsOf(content, i));
 			when(refSection.getLastNCharacters(i)).thenReturn(lastNCharsOf(content, i));
 		}

@@ -24,7 +24,8 @@ public class RawSectionsIncludingOverlapBuilder implements OverlapBuilder {
 			final SectionWithOffset section = sections.get(i);
 			if (i == 0 || section instanceof ReferencedSectionWithOffset) {
 				final String firstPart = buildFirstPart("", sections, i, maxLengthPerRefSection);
-				final String secondPart = buildSecondPart("", sections, i + 1, maxLengthPerRefSection);
+				final String secondPart = buildSecondPart("", sections, i + 1, maxLengthPerRefSection,
+						maxLengthPerRefSection);
 				final String content = firstPart + secondPart;
 				final int nextSectionOffset = sections.get(i + 1).getOffset();
 				final int firstPartLength = firstPart.length();
@@ -39,17 +40,25 @@ public class RawSectionsIncludingOverlapBuilder implements OverlapBuilder {
 			final int currentIndex, final int maxLengthPerRefSection) {
 		final SectionWithOffset section = sections.get(currentIndex);
 
-		if (section instanceof ReferencedSectionWithOffset) {
-			final String substring = section.getLastNCharacters(maxLengthPerRefSection - stringSoFar.length());
-			final String currentString = substring + stringSoFar;
-			final int currentStringLength = currentString.length();
-			if (isFirstPartTooShort(currentStringLength, maxLengthPerRefSection, currentIndex)) {
-				return buildFirstPart(currentString, sections, currentIndex - 1, maxLengthPerRefSection);
-			}
-			return currentString;
+		final int noOfCharsToRead = maxLengthPerRefSection - stringSoFar.length();
+		final String substring = readFirstPart(noOfCharsToRead, currentIndex, section);
+		final String currentString = substring + stringSoFar;
+		final int currentStringLength = currentString.length();
+		if (isFirstPartTooShort(currentStringLength, maxLengthPerRefSection, currentIndex)) {
+			return buildFirstPart(currentString, sections, currentIndex - 1, maxLengthPerRefSection);
 		}
+		return currentString;
+	}
 
-		return section.getContent() + stringSoFar;
+	private String readFirstPart(final int noOfCharsToRead, final int currentIndex, final SectionWithOffset section) {
+		if (isFirstElementRawSection(currentIndex, section)) {
+			return section.getContent();
+		}
+		return section.getLastNCharacters(noOfCharsToRead);
+	}
+
+	private boolean isFirstElementRawSection(final int currentIndex, final SectionWithOffset section) {
+		return (currentIndex == 0) && !(section instanceof ReferencedSectionWithOffset);
 	}
 
 	private boolean isFirstPartTooShort(final int currentStringLength, final int maxLengthPerRefSection,
@@ -58,33 +67,49 @@ public class RawSectionsIncludingOverlapBuilder implements OverlapBuilder {
 	}
 
 	private String buildSecondPart(final String stringSoFar, final List<SectionWithOffset> sections,
-			final int currentIndex, final int maxLengthPerRefSection) {
+			final int currentIndex, final int maxLengthPerRefSection, int remainingNoOfCharsToRead) {
 		final SectionWithOffset section = sections.get(currentIndex);
+		final int nextIndex = currentIndex + 1;
 
 		if (section instanceof ReferencedSectionWithOffset) {
-			final String substring = section.getFirstNCharacters(maxLengthPerRefSection - stringSoFar.length());
+			final String substring = section.getFirstNCharacters(remainingNoOfCharsToRead);
 			final String currentString = stringSoFar + substring;
-			final int currentLength = currentString.length();
-			if (isSecondPartTooShort(currentLength, maxLengthPerRefSection, sections, currentIndex)) {
-				return buildSecondPart(currentString, sections, currentIndex + 1, maxLengthPerRefSection);
+			final int substringLength = substring.length();
+			if (isSecondPartTooShort(substringLength, maxLengthPerRefSection, sections, nextIndex)) {
+				remainingNoOfCharsToRead -= substringLength;
+				return buildSecondPart(currentString, sections, nextIndex, maxLengthPerRefSection,
+						remainingNoOfCharsToRead);
 			}
 			return currentString;
 		}
 
-		if (isLastSection(sections, currentIndex)) {
-			return stringSoFar + section.getContent();
+		final String gatheredString;
+		if (hasNotPassedASecondRefEntry(maxLengthPerRefSection, remainingNoOfCharsToRead)) {
+			gatheredString = stringSoFar + section.getContent();
+		} else {
+			final String firstChars = section.getFirstNCharacters(remainingNoOfCharsToRead);
+			gatheredString = stringSoFar + firstChars;
+			remainingNoOfCharsToRead -= firstChars.length();
 		}
 
-		return section.getContent() + buildSecondPart(stringSoFar, sections, currentIndex + 1, maxLengthPerRefSection);
+		if (isLastSection(sections, nextIndex)) {
+			return gatheredString;
+		}
+
+		return buildSecondPart(gatheredString, sections, nextIndex, maxLengthPerRefSection, remainingNoOfCharsToRead);
 	}
 
-	private boolean isSecondPartTooShort(final int currentStringLength, final int maxLengthPerRefSection,
-			final List<SectionWithOffset> sections, final int currentIndex) {
-		return currentStringLength < maxLengthPerRefSection && currentIndex < sections.size() - 1;
+	private boolean hasNotPassedASecondRefEntry(final int maxLengthPerRefSection, final int remainingNoOfCharsToRead) {
+		return maxLengthPerRefSection == remainingNoOfCharsToRead;
 	}
 
-	private boolean isLastSection(final List<SectionWithOffset> sections, final int currentIndex) {
-		return currentIndex == sections.size() - 1;
+	private boolean isSecondPartTooShort(final int substringLength, final int maxLengthPerRefSection,
+			final List<SectionWithOffset> sections, final int nextIndex) {
+		return substringLength < maxLengthPerRefSection && nextIndex < sections.size();
+	}
+
+	private boolean isLastSection(final List<SectionWithOffset> sections, final int nextIndex) {
+		return nextIndex == sections.size();
 	}
 
 	@Override
