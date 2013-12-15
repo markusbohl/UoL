@@ -1,5 +1,6 @@
 package search.datastructure;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -302,8 +303,10 @@ public class SuffixTree<C extends CharSequence> {
 		}
 		final String queryString = new String(chars);
 		final Edge<C> edge = Edge.find(this, 0, chars[0]);
+		if (edge == null) {
+			return Collections.emptyList();
+		}
 		final String edgeLabel = labelOf(edge);
-
 		return indicesOf(queryString, edge, edgeLabel);
 	}
 
