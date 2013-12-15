@@ -80,10 +80,7 @@ public class SuffixTree<C extends CharSequence> {
 	 * @return True if the sub-sequence exist in the tree.
 	 */
 	public boolean doesSubStringExist(final C sub) {
-		final char[] chars = new char[sub.length()];
-		for (int i = 0; i < sub.length(); i++) {
-			chars[i] = sub.charAt(i);
-		}
+		final char[] chars = toCharArray(sub);
 		final int[] indices = searchEdges(chars);
 		final int start = indices[0];
 		final int end = indices[1];
@@ -277,10 +274,11 @@ public class SuffixTree<C extends CharSequence> {
 			for (int i = edge.firstCharIndex; i <= edge.lastCharIndex; i++) {
 				if (queryPosition >= query.length) {
 					stop = true;
+					startIndex = endIndex - queryPosition;
 					break;
 				} else if (query[queryPosition] == characters[i]) {
 					queryPosition++;
-					endIndex = i;
+					endIndex = i + 1;
 				} else {
 					stop = true;
 					break;
@@ -297,10 +295,7 @@ public class SuffixTree<C extends CharSequence> {
 	}
 
 	public List<Integer> indicesOf(final C sub) {
-		final char[] chars = new char[sub.length()];
-		for (int i = 0; i < sub.length(); i++) {
-			chars[i] = sub.charAt(i);
-		}
+		final char[] chars = toCharArray(sub);
 		final String queryString = new String(chars);
 		final Edge<C> edge = Edge.find(this, 0, chars[0]);
 		if (edge == null) {
@@ -308,6 +303,14 @@ public class SuffixTree<C extends CharSequence> {
 		}
 		final String edgeLabel = labelOf(edge);
 		return indicesOf(queryString, edge, edgeLabel);
+	}
+
+	private char[] toCharArray(final C sub) {
+		final char[] chars = new char[sub.length()];
+		for (int i = 0; i < sub.length(); i++) {
+			chars[i] = sub.charAt(i);
+		}
+		return chars;
 	}
 
 	private String labelOf(final Edge<C> edge) {
@@ -344,6 +347,20 @@ public class SuffixTree<C extends CharSequence> {
 		}
 
 		return indices;
+	}
+
+	public Match findLongestCommonSubString(final C sub) {
+		final char[] chars = toCharArray(sub);
+		final int[] startAndEndOfEdge = searchEdges(chars);
+		final int startIndex = startAndEndOfEdge[0];
+		final int endIndex = startAndEndOfEdge[1];
+		final int length = endIndex - startIndex;
+
+		if (startIndex < 0) {
+			return new Match(startIndex, 0);
+		}
+
+		return new Match(startIndex, length);
 	}
 
 	/**
@@ -571,6 +588,60 @@ public class SuffixTree<C extends CharSequence> {
 			}
 
 			return 0;
+		}
+	}
+
+	public static final class Match {
+
+		private final int index;
+		private final int length;
+
+		public Match(final int index, final int length) {
+			this.index = index;
+			this.length = length;
+		}
+
+		public int getIndex() {
+			return index;
+		}
+
+		public int getLength() {
+			return length;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + length;
+			result = prime * result + index;
+			return result;
+		}
+
+		@Override
+		public boolean equals(final Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final Match other = (Match) obj;
+			if (length != other.length) {
+				return false;
+			}
+			if (index != other.index) {
+				return false;
+			}
+			return true;
+		}
+
+		@Override
+		public String toString() {
+			return String.format("Match [position=%s, length=%s]", index, length);
 		}
 	}
 
