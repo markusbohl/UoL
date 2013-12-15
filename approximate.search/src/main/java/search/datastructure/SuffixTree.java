@@ -281,6 +281,7 @@ public class SuffixTree<C extends CharSequence> {
 					endIndex = i + 1;
 				} else {
 					stop = true;
+					startIndex = endIndex - queryPosition;
 					break;
 				}
 			}

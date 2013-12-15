@@ -58,6 +58,8 @@ public class SuffixTreeTest {
 				$("AGCTAGCT", "AGCN", new Match(0, 3)),//
 				$("AGCTAGCT", "TAGCT", new Match(3, 5)),//
 				$("AGCTNAGCTT", "AGCTT", new Match(5, 5)),//
+				$("AGCTNAGCTT", "AGCTTN", new Match(5, 5)),//
+				$("AGCTNTTNAGCTTN", "AGCTT", new Match(8, 5)),//
 				$("AGCTAGCT", "CTAG", new Match(2, 4)),//
 				$("AGCTAGCT", "CTAGN", new Match(2, 4))//
 		);
