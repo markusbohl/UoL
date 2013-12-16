@@ -19,7 +19,7 @@ public class ReferentialCompressionTest {
 
 	private static final int MIN_RELATIVE_MATCH_LENGTH = 5;
 
-	private ReferentialCompression compression;
+	private Compression<String, String> compression;
 
 	private final Set<Character> ALLOWED_ALPHABET = ImmutableSet.of('A', 'C', 'G', 'T', 'N');
 

@@ -1,4 +1,4 @@
-package search.control;
+package common;
 
 import javax.inject.Inject;
 import javax.inject.Named;

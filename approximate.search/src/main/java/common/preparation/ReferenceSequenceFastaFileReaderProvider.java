@@ -1,4 +1,4 @@
-package search.preparation;
+package common.preparation;
 
 import javax.inject.Inject;
 import javax.inject.Named;

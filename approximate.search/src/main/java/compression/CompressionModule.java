@@ -7,6 +7,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import common.ConfigurationModule;
 import common.datastructure.DatastructureModule;
+import common.preparation.ReferenceSequenceModule;
 
 public class CompressionModule extends AbstractModule {
 
@@ -14,10 +15,9 @@ public class CompressionModule extends AbstractModule {
 	protected void configure() {
 		install(new ConfigurationModule());
 		install(new DatastructureModule());
+		install(new ReferenceSequenceModule());
 
 		bind(new TypeLiteral<Set<Character>>() {
 		}).toInstance(ImmutableSet.of('A', 'C', 'G', 'T', 'N'));
-
-		bind(ReferentialCompression.class);
 	}
 }

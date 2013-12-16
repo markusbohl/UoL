@@ -2,11 +2,9 @@ package search;
 
 import java.util.Set;
 
-import search.control.ApproximateSearchAlgorithm;
-import search.control.Initialization;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import common.Initialization;
 
 public class Main {
 

@@ -1,4 +1,4 @@
-package search.preparation;
+package common.preparation;
 
 import java.io.BufferedReader;
 
@@ -12,6 +12,7 @@ public class ReferenceSequenceProvider extends AbstractLineFilteringStringProvid
 		super(bufferedReader);
 	}
 
+	@Override
 	protected boolean accept(final String line) {
 		return !line.startsWith(">");
 	}

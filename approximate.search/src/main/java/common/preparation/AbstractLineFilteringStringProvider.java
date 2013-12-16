@@ -1,13 +1,15 @@
-package search.preparation;
+package common.preparation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+
+import search.preparation.StringProvider;
 
 public abstract class AbstractLineFilteringStringProvider implements StringProvider {
 
 	private final BufferedReader bufferedReader;
 
-	AbstractLineFilteringStringProvider(final BufferedReader bufferedReader) {
+	protected AbstractLineFilteringStringProvider(final BufferedReader bufferedReader) {
 		this.bufferedReader = bufferedReader;
 	}
 

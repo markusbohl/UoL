@@ -1,4 +1,4 @@
-package search.control;
+package common;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -10,9 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import common.Initialization;
 import common.datastructure.ReferenceIndexStructure;
-
-import search.control.Initialization;
 import search.preparation.StringProvider;
 
 public class InitializationTest {

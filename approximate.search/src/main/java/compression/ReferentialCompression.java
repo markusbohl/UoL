@@ -9,7 +9,7 @@ import javax.inject.Named;
 import common.datastructure.HasIndexAndLength;
 import common.datastructure.ReferenceIndexStructure;
 
-public class ReferentialCompression {
+public class ReferentialCompression implements Compression<String, String> {
 
 	private final ReferenceIndexStructure indexStructure;
 	private final int minRelativeMatchLength;
@@ -23,6 +23,7 @@ public class ReferentialCompression {
 		this.allowedAlphabet = allowedAlphabet;
 	}
 
+	@Override
 	public String compress(final String sequence) {
 		final StringBuilder result = new StringBuilder();
 

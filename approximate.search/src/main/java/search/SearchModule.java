@@ -1,12 +1,12 @@
 package search;
 
-import search.control.ControlModule;
 import search.matcher.MatcherModule;
 import search.preparation.PreparationModule;
 
 import com.google.inject.AbstractModule;
 import common.ConfigurationModule;
 import common.datastructure.DatastructureModule;
+import common.preparation.ReferenceSequenceModule;
 
 public class SearchModule extends AbstractModule {
 
@@ -16,6 +16,7 @@ public class SearchModule extends AbstractModule {
 		install(new MatcherModule());
 		install(new PreparationModule());
 		install(new DatastructureModule());
-		install(new ControlModule());
+		install(new ReferenceSequenceModule());
+		bind(ApproximateSearchAlgorithm.class).to(CompressedSequenceSearchAlgorithm.class);
 	}
 }

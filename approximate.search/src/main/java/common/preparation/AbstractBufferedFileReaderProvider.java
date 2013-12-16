@@ -1,4 +1,4 @@
-package search.preparation;
+package common.preparation;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -14,7 +14,7 @@ public abstract class AbstractBufferedFileReaderProvider implements Provider<Buf
 
 	private final String filePath;
 
-	AbstractBufferedFileReaderProvider(final String filePath) {
+	protected AbstractBufferedFileReaderProvider(final String filePath) {
 		this.filePath = filePath;
 	}
 

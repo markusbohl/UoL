@@ -1,4 +1,4 @@
-package search.control;
+package search;
 
 import java.util.Set;
 

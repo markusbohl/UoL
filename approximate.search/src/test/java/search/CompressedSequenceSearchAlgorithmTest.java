@@ -1,4 +1,4 @@
-package search.control;
+package search;
 
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
@@ -18,9 +18,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import common.datastructure.ReferenceIndexStructure;
-
-import search.control.ApproximateSearchAlgorithm;
-import search.control.CompressedSequenceSearchAlgorithm;
+import search.ApproximateSearchAlgorithm;
+import search.CompressedSequenceSearchAlgorithm;
 import search.entity.ReferencedSectionWithOffset;
 import search.entity.Section;
 import search.entity.SectionWithOffset;

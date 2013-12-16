@@ -15,9 +15,6 @@ public class PreparationModule extends AbstractModule {
 		bind(Partitioner.class).to(NonOverlappingPartitioner.class);
 		bind(OverlapBuilder.class).to(RawSectionsIncludingOverlapBuilder.class);
 		// bind(OverlapBuilder.class).to(PerSectionOverlapBuilder.class);
-		bind(StringProvider.class).annotatedWith(Names.named("reference.sequence")).to(ReferenceSequenceProvider.class);
-		bind(BufferedReader.class).annotatedWith(Names.named("reference.sequence")).toProvider(
-				ReferenceSequenceFastaFileReaderProvider.class);
 		bind(StringProvider.class).annotatedWith(Names.named("compressed.sequence")).to(
 				CompressedSequenceProvider.class);
 		bind(BufferedReader.class).annotatedWith(Names.named("compressed.sequence")).toProvider(

@@ -1,4 +1,4 @@
-package search.preparation;
+package common.preparation;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -12,7 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import search.preparation.ReferenceSequenceProvider;
+import common.preparation.ReferenceSequenceProvider;
+
 import search.preparation.StringProvider;
 
 public class ReferenceSequenceProviderTest {
