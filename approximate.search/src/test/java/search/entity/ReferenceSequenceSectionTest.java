@@ -9,7 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import search.datastructure.ReferenceIndexStructure;
+import common.datastructure.ReferenceIndexStructure;
+
 import search.entity.ReferenceSequenceSection;
 import search.entity.ReferencedSectionWithOffset;
 

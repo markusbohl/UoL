@@ -17,9 +17,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import common.datastructure.ReferenceIndexStructure;
+
 import search.control.ApproximateSearchAlgorithm;
 import search.control.CompressedSequenceSearchAlgorithm;
-import search.datastructure.ReferenceIndexStructure;
 import search.entity.ReferencedSectionWithOffset;
 import search.entity.Section;
 import search.entity.SectionWithOffset;

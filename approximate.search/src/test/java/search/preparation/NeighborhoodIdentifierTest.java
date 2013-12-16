@@ -13,7 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import search.datastructure.ReferenceIndexStructure;
+import common.datastructure.ReferenceIndexStructure;
+
 import search.entity.Section;
 import search.preparation.NeighborhoodIdentifier;
 import search.preparation.Partitioner;

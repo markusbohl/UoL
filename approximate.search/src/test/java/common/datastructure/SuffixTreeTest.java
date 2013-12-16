@@ -1,4 +1,4 @@
-package search.datastructure;
+package common.datastructure;
 
 import static junitparams.JUnitParamsRunner.$;
 import static org.hamcrest.Matchers.hasItems;
@@ -14,7 +14,8 @@ import junitparams.Parameters;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import search.datastructure.SuffixTree.Match;
+import common.datastructure.SuffixTree;
+import common.datastructure.SuffixTree.Match;
 
 @RunWith(JUnitParamsRunner.class)
 public class SuffixTreeTest {

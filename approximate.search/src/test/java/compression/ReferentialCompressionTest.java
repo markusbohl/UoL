@@ -11,10 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import search.datastructure.HasIndexAndLength;
-import search.datastructure.ReferenceIndexStructure;
-
 import com.google.common.collect.ImmutableSet;
+import common.datastructure.HasIndexAndLength;
+import common.datastructure.ReferenceIndexStructure;
 
 public class ReferentialCompressionTest {
 

@@ -1,4 +1,4 @@
-package search.datastructure;
+package common.datastructure;
 
 public interface HasIndexAndLength {
 

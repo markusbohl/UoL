@@ -3,7 +3,8 @@ package search.control;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import search.datastructure.ReferenceIndexStructure;
+import common.datastructure.ReferenceIndexStructure;
+
 import search.preparation.StringProvider;
 
 public class Initialization {

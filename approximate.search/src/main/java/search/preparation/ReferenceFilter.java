@@ -5,8 +5,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import common.datastructure.ReferenceIndexStructure;
+
 import search.datastructure.IntervalTree;
-import search.datastructure.ReferenceIndexStructure;
 import search.datastructure.IntervalTree.IntervalData;
 import search.entity.ReferenceSequenceSection;
 import search.entity.ReferencedSectionWithOffset;

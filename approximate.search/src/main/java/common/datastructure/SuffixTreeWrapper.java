@@ -1,8 +1,8 @@
-package search.datastructure;
+package common.datastructure;
 
 import java.util.List;
 
-import search.datastructure.SuffixTree.Match;
+import common.datastructure.SuffixTree.Match;
 
 public class SuffixTreeWrapper implements ReferenceIndexStructure {
 

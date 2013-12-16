@@ -1,4 +1,4 @@
-package search.datastructure;
+package common.datastructure;
 
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
@@ -10,6 +10,10 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import common.datastructure.HasIndexAndLength;
+import common.datastructure.ReferenceIndexStructure;
+import common.datastructure.SuffixTreeWrapper;
 
 public class SuffixTreeWrapperTest {
 

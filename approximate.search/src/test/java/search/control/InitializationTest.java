@@ -10,8 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import common.datastructure.ReferenceIndexStructure;
+
 import search.control.Initialization;
-import search.datastructure.ReferenceIndexStructure;
 import search.preparation.StringProvider;
 
 public class InitializationTest {

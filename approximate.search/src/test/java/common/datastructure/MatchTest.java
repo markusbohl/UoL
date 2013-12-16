@@ -1,4 +1,4 @@
-package search.datastructure;
+package common.datastructure;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import search.datastructure.SuffixTree.Match;
+import common.datastructure.SuffixTree.Match;
 
 public class MatchTest {
 

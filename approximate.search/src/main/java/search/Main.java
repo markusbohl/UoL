@@ -3,7 +3,6 @@ package search;
 import java.util.Set;
 
 import search.control.ApproximateSearchAlgorithm;
-import search.control.ControlModule;
 import search.control.Initialization;
 
 import com.google.inject.Guice;
@@ -12,7 +11,7 @@ import com.google.inject.Injector;
 public class Main {
 
 	public static void main(final String[] args) {
-		final Injector injector = Guice.createInjector(new ControlModule());
+		final Injector injector = Guice.createInjector(new SearchModule());
 		final Initialization initialization = injector.getInstance(Initialization.class);
 		initialization.init();
 

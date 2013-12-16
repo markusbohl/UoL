@@ -17,7 +17,8 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import search.datastructure.ReferenceIndexStructure;
+import common.datastructure.ReferenceIndexStructure;
+
 import search.entity.ReferenceSequenceSection;
 import search.entity.ReferencedSectionWithOffset;
 import search.entity.SectionWithOffset;

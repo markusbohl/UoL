@@ -1,6 +1,6 @@
 package search.entity;
 
-import search.datastructure.ReferenceIndexStructure;
+import common.datastructure.ReferenceIndexStructure;
 
 public class ReferenceSequenceSection implements ReferencedSectionWithOffset {
 

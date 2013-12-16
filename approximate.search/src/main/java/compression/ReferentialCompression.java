@@ -4,9 +4,10 @@ import java.text.MessageFormat;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import search.datastructure.HasIndexAndLength;
-import search.datastructure.ReferenceIndexStructure;
+import common.datastructure.HasIndexAndLength;
+import common.datastructure.ReferenceIndexStructure;
 
 public class ReferentialCompression {
 
@@ -15,8 +16,8 @@ public class ReferentialCompression {
 	private final Set<Character> allowedAlphabet;
 
 	@Inject
-	ReferentialCompression(final ReferenceIndexStructure indexStructure, final int minRelativeMatchLength,
-			final Set<Character> allowedAlphabet) {
+	ReferentialCompression(final ReferenceIndexStructure indexStructure,
+			@Named("min.relative.match.length") final int minRelativeMatchLength, final Set<Character> allowedAlphabet) {
 		this.indexStructure = indexStructure;
 		this.minRelativeMatchLength = minRelativeMatchLength;
 		this.allowedAlphabet = allowedAlphabet;

@@ -22,7 +22,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import search.datastructure.ReferenceIndexStructure;
+import common.datastructure.ReferenceIndexStructure;
+
 import search.entity.ReferenceSequenceSection;
 import search.entity.SectionWithOffset;
 import search.entity.SequenceSection;
