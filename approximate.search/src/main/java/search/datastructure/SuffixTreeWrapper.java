@@ -2,6 +2,8 @@ package search.datastructure;
 
 import java.util.List;
 
+import search.datastructure.SuffixTree.Match;
+
 public class SuffixTreeWrapper implements ReferenceIndexStructure {
 
 	private String string;
@@ -30,5 +32,27 @@ public class SuffixTreeWrapper implements ReferenceIndexStructure {
 			throw new IllegalStateException("index structure has not been initialized");
 		}
 		return string.substring(beginIndex, beginIndex + length);
+	}
+
+	@Override
+	public HasIndexAndLength findLongestCommonSubstring(final String otherString) {
+		if (suffixTree == null) {
+			throw new IllegalStateException("index structure has not been initialized");
+		}
+
+		final Match longestCommonSubString = suffixTree.findLongestCommonSubString(otherString);
+
+		return new HasIndexAndLength() {
+
+			@Override
+			public int getIndex() {
+				return longestCommonSubString.getIndex();
+			}
+
+			@Override
+			public int getLength() {
+				return longestCommonSubString.getLength();
+			}
+		};
 	}
 }

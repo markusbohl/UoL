@@ -9,4 +9,6 @@ public interface ReferenceIndexStructure {
 	List<Integer> indicesOf(String substring);
 
 	String substring(int beginIndex, int length);
+
+	HasIndexAndLength findLongestCommonSubstring(String otherString);
 }

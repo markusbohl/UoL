@@ -11,9 +11,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import search.datastructure.ReferenceIndexStructure;
-import search.datastructure.SuffixTreeWrapper;
-
 public class SuffixTreeWrapperTest {
 
 	private ReferenceIndexStructure indexStructure;
@@ -39,6 +36,11 @@ public class SuffixTreeWrapperTest {
 		indexStructure.substring(1, 3);
 	}
 
+	@Test(expected = IllegalStateException.class)
+	public void initRequiredBeforeInvokingFindLongestCommonSubstring() {
+		indexStructure.findLongestCommonSubstring("AC");
+	}
+
 	@Test
 	public void indicesOf() {
 		indexStructure.init("ACTAC");
@@ -54,5 +56,15 @@ public class SuffixTreeWrapperTest {
 		indexStructure.init("ACTAC");
 
 		assertThat(indexStructure.substring(1, 3), is("CTA"));
+	}
+
+	@Test
+	public void findLongestCommonSubstring() {
+		indexStructure.init("ACTAC");
+
+		final HasIndexAndLength longestCommonSubstring = indexStructure.findLongestCommonSubstring("TAC");
+
+		assertThat(longestCommonSubstring.getIndex(), is(2));
+		assertThat(longestCommonSubstring.getLength(), is(3));
 	}
 }
