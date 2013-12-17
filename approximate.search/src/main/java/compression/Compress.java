@@ -8,7 +8,7 @@ import com.google.inject.Injector;
 import common.Initialization;
 import common.preparation.SequenceToCompressProvider;
 
-public class Main {
+public class Compress {
 
 	public static void main(final String[] args) throws IOException {
 		final Injector injector = Guice.createInjector(new CompressionModule());
