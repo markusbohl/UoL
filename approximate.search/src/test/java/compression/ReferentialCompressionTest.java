@@ -65,8 +65,8 @@ public class ReferentialCompressionTest {
 		when(longestCommonSubstring1.getLength()).thenReturn(4);
 		when(longestCommonSubstring2.getIndex()).thenReturn(-1);
 		when(longestCommonSubstring2.getLength()).thenReturn(0);
-		when(indexStructure.findLongestCommonSubstring("ACGTATTG")).thenReturn(longestCommonSubstring1);
-		when(indexStructure.findLongestCommonSubstring("ATTG")).thenReturn(longestCommonSubstring2);
+		when(indexStructure.findLongestPrefixSuffixMatch("ACGTATTG")).thenReturn(longestCommonSubstring1);
+		when(indexStructure.findLongestPrefixSuffixMatch("ATTG")).thenReturn(longestCommonSubstring2);
 
 		final String compressedResult = compression.compress("ACGTATTG");
 
@@ -77,7 +77,7 @@ public class ReferentialCompressionTest {
 	public void encodeRelativeMatchesAsSuch() {
 		when(longestCommonSubstring1.getIndex()).thenReturn(0);
 		when(longestCommonSubstring1.getLength()).thenReturn(8);
-		when(indexStructure.findLongestCommonSubstring("ACGTACGT")).thenReturn(longestCommonSubstring1);
+		when(indexStructure.findLongestPrefixSuffixMatch("ACGTACGT")).thenReturn(longestCommonSubstring1);
 
 		final String compressedResult = compression.compress("ACGTACGT");
 
@@ -88,14 +88,14 @@ public class ReferentialCompressionTest {
 	public void compress() {
 		when(longestCommonSubstring1.getIndex()).thenReturn(-1);
 		when(longestCommonSubstring1.getLength()).thenReturn(0);
-		when(indexStructure.findLongestCommonSubstring("NNCGTACGTACGTTTGCCAGTAAAGCCT")).thenReturn(
+		when(indexStructure.findLongestPrefixSuffixMatch("NNCGTACGTACGTTTGCCAGTAAAGCCT")).thenReturn(
 				longestCommonSubstring1);
 		when(longestCommonSubstring2.getIndex()).thenReturn(5);
 		when(longestCommonSubstring2.getLength()).thenReturn(10);
-		when(indexStructure.findLongestCommonSubstring("TACGTACGTTTGCCAGTAAAGCCT")).thenReturn(longestCommonSubstring2);
+		when(indexStructure.findLongestPrefixSuffixMatch("TACGTACGTTTGCCAGTAAAGCCT")).thenReturn(longestCommonSubstring2);
 		when(longestCommonSubstring3.getIndex()).thenReturn(18);
 		when(longestCommonSubstring3.getLength()).thenReturn(11);
-		when(indexStructure.findLongestCommonSubstring("TGCCAGTAAAGCCT")).thenReturn(longestCommonSubstring3);
+		when(indexStructure.findLongestPrefixSuffixMatch("TGCCAGTAAAGCCT")).thenReturn(longestCommonSubstring3);
 
 		final String compressedResult = compression.compress("NNCGTACGTACGTTTGCCAGTAAAGCCT");
 

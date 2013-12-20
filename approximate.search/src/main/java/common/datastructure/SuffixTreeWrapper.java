@@ -35,24 +35,13 @@ public class SuffixTreeWrapper implements ReferenceIndexStructure {
 	}
 
 	@Override
-	public HasIndexAndLength findLongestCommonSubstring(final String otherString) {
+	public HasIndexAndLength findLongestPrefixSuffixMatch(final String otherString) {
 		if (suffixTree == null) {
 			throw new IllegalStateException("index structure has not been initialized");
 		}
 
 		final Match longestCommonSubString = suffixTree.findLongestCommonSubString(otherString);
 
-		return new HasIndexAndLength() {
-
-			@Override
-			public int getIndex() {
-				return longestCommonSubString.getIndex();
-			}
-
-			@Override
-			public int getLength() {
-				return longestCommonSubString.getLength();
-			}
-		};
+		return new IndexAndLength(longestCommonSubString.getIndex(), longestCommonSubString.getLength());
 	}
 }

@@ -10,5 +10,5 @@ public interface ReferenceIndexStructure {
 
 	String substring(int beginIndex, int length);
 
-	HasIndexAndLength findLongestCommonSubstring(String otherString);
+	HasIndexAndLength findLongestPrefixSuffixMatch(String otherString);
 }

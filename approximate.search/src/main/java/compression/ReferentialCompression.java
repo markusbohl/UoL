@@ -31,7 +31,7 @@ public class ReferentialCompression implements Compression<String, String> {
 		while (index < sequence.length()) {
 			final String remainingSequence = sequence.substring(index);
 			final HasIndexAndLength longestCommonSubstring = indexStructure
-					.findLongestCommonSubstring(remainingSequence);
+					.findLongestPrefixSuffixMatch(remainingSequence);
 
 			if (commonSubstringWithMinimumLengthExists(longestCommonSubstring)) {
 				index += longestCommonSubstring.getLength();
