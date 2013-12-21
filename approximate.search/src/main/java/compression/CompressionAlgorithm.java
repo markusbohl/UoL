@@ -1,6 +1,6 @@
 package compression;
 
-public interface Compression<I, O> {
+public interface CompressionAlgorithm<I, O> {
 
 	O compress(I input);
 }

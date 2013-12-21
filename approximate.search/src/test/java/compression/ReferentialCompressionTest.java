@@ -19,7 +19,7 @@ public class ReferentialCompressionTest {
 
 	private static final int MIN_RELATIVE_MATCH_LENGTH = 5;
 
-	private Compression<String, String> compression;
+	private CompressionAlgorithm<String, String> compression;
 
 	private final Set<Character> ALLOWED_ALPHABET = ImmutableSet.of('A', 'C', 'G', 'T', 'N');
 
@@ -35,7 +35,7 @@ public class ReferentialCompressionTest {
 	@Before
 	public void setUp() throws Exception {
 		initMocks(this);
-		compression = new ReferentialCompression(indexStructure, MIN_RELATIVE_MATCH_LENGTH, ALLOWED_ALPHABET);
+		compression = new ReferentialCompressionAlgorithm(indexStructure, MIN_RELATIVE_MATCH_LENGTH, ALLOWED_ALPHABET);
 	}
 
 	@Test

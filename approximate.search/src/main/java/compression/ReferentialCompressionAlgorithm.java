@@ -9,14 +9,14 @@ import javax.inject.Named;
 import common.datastructure.HasIndexAndLength;
 import common.datastructure.ReferenceIndexStructure;
 
-public class ReferentialCompression implements Compression<String, String> {
+public class ReferentialCompressionAlgorithm implements CompressionAlgorithm<String, String> {
 
 	private final ReferenceIndexStructure indexStructure;
 	private final int minRelativeMatchLength;
 	private final Set<Character> allowedAlphabet;
 
 	@Inject
-	ReferentialCompression(final ReferenceIndexStructure indexStructure,
+	ReferentialCompressionAlgorithm(final ReferenceIndexStructure indexStructure,
 			@Named("min.relative.match.length") final int minRelativeMatchLength, final Set<Character> allowedAlphabet) {
 		this.indexStructure = indexStructure;
 		this.minRelativeMatchLength = minRelativeMatchLength;
@@ -30,12 +30,12 @@ public class ReferentialCompression implements Compression<String, String> {
 		int index = 0;
 		while (index < sequence.length()) {
 			final String remainingSequence = sequence.substring(index);
-			final HasIndexAndLength longestCommonSubstring = indexStructure
+			final HasIndexAndLength longestPrefixSuffixMatch = indexStructure
 					.findLongestPrefixSuffixMatch(remainingSequence);
 
-			if (commonSubstringWithMinimumLengthExists(longestCommonSubstring)) {
-				index += longestCommonSubstring.getLength();
-				result.append(encodeRef(longestCommonSubstring));
+			if (matchWithMinimumLengthExists(longestPrefixSuffixMatch)) {
+				index += longestPrefixSuffixMatch.getLength();
+				result.append(encodeRef(longestPrefixSuffixMatch));
 			} else {
 				final String rawString = rawString(sequence, index);
 				index += rawString.length();
@@ -46,18 +46,17 @@ public class ReferentialCompression implements Compression<String, String> {
 		return result.toString();
 	}
 
-	private boolean commonSubstringWithMinimumLengthExists(final HasIndexAndLength longestCommonSubstring) {
-		if (longestCommonSubstring == null) {
+	private boolean matchWithMinimumLengthExists(final HasIndexAndLength longestPrefixSuffixMatch) {
+		if (longestPrefixSuffixMatch == null) {
 			return false;
 		}
 
-		final boolean hasMinimumLenth = longestCommonSubstring.getLength() >= minRelativeMatchLength;
-		return hasMinimumLenth;
+		return longestPrefixSuffixMatch.getLength() >= minRelativeMatchLength;
 	}
 
 	private String rawString(final String sequence, int index) {
 		final StringBuilder raw = new StringBuilder();
-		while (index < sequence.length() && (rawMatchIsStillShort(raw) || charIsNotAllowed(sequence.charAt(index)))) {
+		while (index < sequence.length() && (rawMatchIsStillShortEnough(raw) || charIsNotAllowed(sequence.charAt(index)))) {
 			raw.append(sequence.charAt(index));
 			index++;
 		}
@@ -65,7 +64,7 @@ public class ReferentialCompression implements Compression<String, String> {
 		return raw.toString();
 	}
 
-	private boolean rawMatchIsStillShort(final StringBuilder raw) {
+	private boolean rawMatchIsStillShortEnough(final StringBuilder raw) {
 		return raw.length() < minRelativeMatchLength - 1;
 	}
 
