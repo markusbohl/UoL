@@ -13,7 +13,8 @@ public class CompressionModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		install(new ConfigurationModule());
+		install(new ConfigurationModule("/configuration/reference.properties"));
+		install(new ConfigurationModule("/configuration/compression.properties"));
 		install(new DatastructureModule());
 		install(new ReferenceSequenceModule());
 

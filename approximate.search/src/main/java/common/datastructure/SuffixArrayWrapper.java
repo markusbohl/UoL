@@ -19,6 +19,7 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 			throw new IllegalArgumentException("sequence must not be null");
 		}
 
+		this.suffixArray = SuffixArrays.create(sequence, Algorithm.SAIS.getInstance());
 		this.sequence = sequence;
 	}
 
@@ -27,7 +28,6 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 		if (sequence == null) {
 			throw new IllegalStateException("index structure has not been initialized");
 		}
-		this.suffixArray = SuffixArrays.create(sequence, Algorithm.SAIS.getInstance());
 
 		return indicesOf(substring, 0, suffixArray.length);
 	}
@@ -37,7 +37,6 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 
 		if (min <= max && min < suffixArray.length) {
 			final int midpoint = midpoint(min, max);
-			System.out.println("min: " + min + "; max: " + max + "; midpoint: " + midpoint);
 			if (sequence.charAt(suffixArray[midpoint]) < query.charAt(0)) {
 				indices.addAll(indicesOf(query, midpoint + 1, max));
 			} else if (sequence.charAt(suffixArray[midpoint]) > query.charAt(0)) {
@@ -58,6 +57,22 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 		return indices;
 	}
 
+	private int midpoint(final int min, final int max) {
+		return min + ((max - min) / 2);
+	}
+
+	private boolean substringStartsAtIndex(final String substring, final int index) {
+		if (sequence.length() >= index + substring.length()) {
+			for (int i = 0; i < substring.length(); i++) {
+				if (sequence.charAt(index + i) != substring.charAt(i)) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
 	private List<Integer> findConsecutiveMatches(final String query, int saIndex, final boolean forwards) {
 		final List<Integer> indices = new LinkedList<>();
 
@@ -73,22 +88,6 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 		}
 
 		return indices;
-	}
-
-	private boolean substringStartsAtIndex(final String substring, final int index) {
-		if (sequence.length() >= index + substring.length()) {
-			for (int i = 0; i < substring.length(); i++) {
-				if (sequence.charAt(index + i) != substring.charAt(i)) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-
-	private int midpoint(final int min, final int max) {
-		return min + ((max - min) / 2);
 	}
 
 	@Override

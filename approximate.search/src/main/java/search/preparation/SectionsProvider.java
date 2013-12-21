@@ -31,7 +31,7 @@ public class SectionsProvider {
 
 	private void init(final StringProvider provider, final CompressedSequenceParser parser,
 			final OverlapBuilder overlapBuilder, final int patternLength, final int allowedErrors) {
-		parser.parse(provider.provide());
+		parser.parse(provider.toString());
 		overlapBuilder.feed(parser.getAllEntries(), patternLength, allowedErrors);
 	}
 

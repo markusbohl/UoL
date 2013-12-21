@@ -12,7 +12,8 @@ public class SearchModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		install(new ConfigurationModule());
+		install(new ConfigurationModule("/configuration/reference.properties"));
+		install(new ConfigurationModule("/configuration/search.properties"));
 		install(new MatcherModule());
 		install(new PreparationModule());
 		install(new DatastructureModule());

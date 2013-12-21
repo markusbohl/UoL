@@ -3,13 +3,17 @@ package common;
 import java.io.IOException;
 import java.util.Properties;
 
-import search.preparation.PreparationModule;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.ProvisionException;
 import com.google.inject.name.Names;
 
 public class ConfigurationModule extends AbstractModule {
+
+	private final String configurationResourcePath;
+
+	public ConfigurationModule(final String configurationResourcePath) {
+		this.configurationResourcePath = configurationResourcePath;
+	}
 
 	@Override
 	protected void configure() {
@@ -19,7 +23,7 @@ public class ConfigurationModule extends AbstractModule {
 	private Properties getProperties() {
 		final Properties properties = new Properties();
 		try {
-			properties.load(PreparationModule.class.getResourceAsStream("/configuration/config.properties"));
+			properties.load(ConfigurationModule.class.getResourceAsStream(configurationResourcePath));
 			return properties;
 		} catch (final IOException e) {
 			throw new ProvisionException(e.getMessage());

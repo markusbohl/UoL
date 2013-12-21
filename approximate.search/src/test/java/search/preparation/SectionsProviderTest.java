@@ -64,7 +64,7 @@ public class SectionsProviderTest {
 		overlappingArea = new SequenceSection(8, "AGACGGTT");
 		sequenceSections = Arrays.asList(refSeqSection, seqSection);
 
-		when(provider.provide()).thenReturn("RM(2,10)R(ATAGAC");
+		when(provider.toString()).thenReturn("RM(2,10)R(ATAGAC");
 		when(parser.getAllEntries()).thenReturn(sequenceSections);
 		when(parser.getRawEntries()).thenReturn(Arrays.asList(seqSection));
 		when(parser.getRelativeMatchEntries()).thenReturn(Arrays.asList(refSeqSection));
