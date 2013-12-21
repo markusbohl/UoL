@@ -2,13 +2,13 @@ package search;
 
 import java.util.Set;
 
-import search.preparation.StringProvider;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
+
 import common.datastructure.ReferenceIndexStructure;
+import common.preparation.StringProvider;
 
 public class Search {
 

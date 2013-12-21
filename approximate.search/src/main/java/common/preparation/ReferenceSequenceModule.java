@@ -2,8 +2,6 @@ package common.preparation;
 
 import java.io.BufferedReader;
 
-import search.preparation.StringProvider;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;

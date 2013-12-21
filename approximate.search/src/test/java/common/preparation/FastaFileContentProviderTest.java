@@ -13,8 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import search.preparation.StringProvider;
-
 public class FastaFileContentProviderTest {
 
 	private static final String FILE_PATH = "filePath";

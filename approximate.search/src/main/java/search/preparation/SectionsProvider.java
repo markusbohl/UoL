@@ -10,6 +10,7 @@ import search.entity.ReferencedSectionWithOffset;
 import search.entity.SectionWithOffset;
 
 import com.google.inject.assistedinject.Assisted;
+import common.preparation.StringProvider;
 
 public class SectionsProvider {
 

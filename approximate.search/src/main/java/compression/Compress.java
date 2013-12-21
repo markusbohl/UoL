@@ -3,13 +3,13 @@ package compression;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
-import search.preparation.StringProvider;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
+
 import common.datastructure.ReferenceIndexStructure;
+import common.preparation.StringProvider;
 import common.preparation.StringProviderFactory;
 
 public class Compress {

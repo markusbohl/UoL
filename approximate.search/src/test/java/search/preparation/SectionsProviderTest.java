@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import common.datastructure.ReferenceIndexStructure;
-
+import common.preparation.StringProvider;
 import search.entity.ReferenceSequenceSection;
 import search.entity.ReferencedSectionWithOffset;
 import search.entity.SectionWithOffset;
@@ -26,7 +26,6 @@ import search.entity.SequenceSection;
 import search.preparation.CompressedSequenceParser;
 import search.preparation.OverlapBuilder;
 import search.preparation.SectionsProvider;
-import search.preparation.StringProvider;
 
 public class SectionsProviderTest {
 
