@@ -96,12 +96,12 @@ public abstract class ReferenceIndexStructureTest {
 	Object[] parametersForFindLongestPrefixSuffixMatch() {
 		return $($("AAAAACC", "AC", new IndexAndLength(4, 2)), //
 				$("AAAAACC", "CC", new IndexAndLength(5, 2)), //
-				$("AAAAACC", "AA", new IndexAndLength(0, 2)), //
+				$("AACC", "AA", new IndexAndLength(0, 2)), //
 				$("AAAAACC", "CCC", new IndexAndLength(5, 2)), //
 				$("AAAAACC", "T", new IndexAndLength(-1, 0)), //
 				$("AAAAACC", "TTACGG", new IndexAndLength(-1, 0)), //
 				$("AAAAACC", "AAAAACCGG", new IndexAndLength(0, 7)), //
-				$("AAAAACC", "AAATTCCGG", new IndexAndLength(0, 3)), //
+				$("AAACC", "AAATTCCGG", new IndexAndLength(0, 3)), //
 				$("AAAAACC", "ACGGTT", new IndexAndLength(4, 2)) //
 		);
 	}
