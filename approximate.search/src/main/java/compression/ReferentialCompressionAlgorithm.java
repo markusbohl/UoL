@@ -35,11 +35,13 @@ public class ReferentialCompressionAlgorithm implements CompressionAlgorithm<Str
 
 			if (matchWithMinimumLengthExists(longestPrefixSuffixMatch)) {
 				index += longestPrefixSuffixMatch.getLength();
-				result.append(encodeRef(longestPrefixSuffixMatch));
+				final String ref = encodeRef(longestPrefixSuffixMatch);
+				result.append(ref);
 			} else {
 				final String rawString = rawString(sequence, index);
 				index += rawString.length();
-				result.append(encodeRaw(rawString));
+				final String raw = encodeRaw(rawString);
+				result.append(raw);
 			}
 		}
 
@@ -56,7 +58,8 @@ public class ReferentialCompressionAlgorithm implements CompressionAlgorithm<Str
 
 	private String rawString(final String sequence, int index) {
 		final StringBuilder raw = new StringBuilder();
-		while (index < sequence.length() && (rawMatchIsStillShortEnough(raw) || charIsNotAllowed(sequence.charAt(index)))) {
+		while (index < sequence.length()
+				&& (rawMatchIsStillShortEnough(raw) || charIsNotAllowed(sequence.charAt(index)))) {
 			raw.append(sequence.charAt(index));
 			index++;
 		}
@@ -77,6 +80,6 @@ public class ReferentialCompressionAlgorithm implements CompressionAlgorithm<Str
 	}
 
 	private String encodeRef(final HasIndexAndLength refData) {
-		return MessageFormat.format("RM({0},{1})", refData.getIndex(), refData.getLength());
+		return MessageFormat.format("RM({0,number,#},{1,number,#})", refData.getIndex(), refData.getLength());
 	}
 }
