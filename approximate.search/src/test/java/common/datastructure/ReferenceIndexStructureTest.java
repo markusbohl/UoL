@@ -82,13 +82,27 @@ public abstract class ReferenceIndexStructureTest {
 	}
 
 	@Test
-	public void findLongestPrefixSuffixMatch() {
-		indexStructure.init("ACTAC");
+	@Parameters
+	public void findLongestPrefixSuffixMatch(final String referenceSequence, final String otherSequence,
+			final HasIndexAndLength indexAndLength) {
+		indexStructure.init(referenceSequence);
 
-		final HasIndexAndLength longestCommonSubstring = indexStructure.findLongestPrefixSuffixMatch("TAC");
+		final HasIndexAndLength longestPrefixSuffixMatch = indexStructure.findLongestPrefixSuffixMatch(otherSequence);
 
-		assertThat(longestCommonSubstring.getIndex(), is(2));
-		assertThat(longestCommonSubstring.getLength(), is(3));
+		assertThat(longestPrefixSuffixMatch.getIndex(), is(indexAndLength.getIndex()));
+		assertThat(longestPrefixSuffixMatch.getLength(), is(indexAndLength.getLength()));
 	}
 
+	Object[] parametersForFindLongestPrefixSuffixMatch() {
+		return $($("AAAAACC", "AC", new IndexAndLength(4, 2)), //
+				$("AAAAACC", "CC", new IndexAndLength(5, 2)), //
+				$("AAAAACC", "AA", new IndexAndLength(0, 2)), //
+				$("AAAAACC", "CCC", new IndexAndLength(5, 2)), //
+				$("AAAAACC", "T", new IndexAndLength(-1, 0)), //
+				$("AAAAACC", "TTACGG", new IndexAndLength(-1, 0)), //
+				$("AAAAACC", "AAAAACCGG", new IndexAndLength(0, 7)), //
+				$("AAAAACC", "AAATTCCGG", new IndexAndLength(0, 3)), //
+				$("AAAAACC", "ACGGTT", new IndexAndLength(4, 2)) //
+		);
+	}
 }

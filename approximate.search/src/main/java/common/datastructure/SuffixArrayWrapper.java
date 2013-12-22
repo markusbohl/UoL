@@ -10,7 +10,6 @@ import org.jsuffixarrays.SuffixData;
 public class SuffixArrayWrapper implements ReferenceIndexStructure {
 
 	private String sequence;
-	private int[] lcp;
 	private int[] suffixArray;
 
 	@Override
@@ -104,25 +103,37 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 			throw new IllegalStateException("index structure has not been initialized");
 		}
 
-		final String string = sequence + " " + otherString;
-		final SuffixData suffixData = SuffixArrays.createWithLCP(string, Algorithm.SAIS.getInstance());
-		this.lcp = suffixData.getLCP();
-		this.suffixArray = suffixData.getSuffixArray();
-		final int boundaryIndex = sequence.length();
-		int maxLength = -1;
-		int maxLengthIndex = -1;
+		final SuffixData suffixData = SuffixArrays.createWithLCP(otherString, Algorithm.SAIS.getInstance());
+		final int[] lcp = suffixData.getLCP();
+		int longestMatchIndex = -1;
+		int longestMatchLength = 0;
 
-		for (int i = 1; i < lcp.length; i++) {
-			if (lcp[i] > maxLength && isIndexWithinBoundaries(boundaryIndex, i)) {
-				maxLength = lcp[i];
-				maxLengthIndex = suffixArray[i];
+		int i = 0;
+		while (i < sequence.length()) {
+			int j = 0;
+			final int partialMatchIndex = i;
+			int partialMatchLength = 0;
+			while (j < otherString.length() && i < sequence.length()) {
+				if (sequence.charAt(i) == otherString.charAt(j)) {
+					i++;
+					j++;
+					partialMatchLength++;
+
+					if (partialMatchLength > longestMatchLength) {
+						longestMatchIndex = partialMatchIndex;
+						longestMatchLength = partialMatchLength;
+					}
+				} else {
+					if (partialMatchLength > 1) {
+						i += partialMatchLength - lcp[partialMatchLength - 1];
+					} else {
+						i++;
+					}
+					break;
+				}
 			}
 		}
 
-		return new IndexAndLength(maxLengthIndex, maxLength);
-	}
-
-	private boolean isIndexWithinBoundaries(final int boundaryIndex, final int i) {
-		return suffixArray[i] < boundaryIndex && suffixArray[i - 1] > boundaryIndex;
+		return new IndexAndLength(longestMatchIndex, longestMatchLength);
 	}
 }
