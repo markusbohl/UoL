@@ -2,15 +2,26 @@ package common.datastructure;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.jsuffixarrays.Algorithm;
 import org.jsuffixarrays.SuffixArrays;
-import org.jsuffixarrays.SuffixData;
 
 public class SuffixArrayWrapper implements ReferenceIndexStructure {
 
 	private String sequence;
 	private int[] suffixArray;
+	private Map<String, List<Integer>> stringToIndicesMap;
+	private final int minRelativeMatchLength;
+
+	@Inject
+	SuffixArrayWrapper(@Named("min.relative.match.length") final int minRelativeMatchLength) {
+		this.minRelativeMatchLength = minRelativeMatchLength;
+	}
 
 	@Override
 	public void init(final String sequence) {
@@ -20,6 +31,7 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 
 		this.suffixArray = SuffixArrays.create(sequence, Algorithm.SAIS.getInstance());
 		this.sequence = sequence;
+		this.stringToIndicesMap = new TreeMap<>();
 	}
 
 	@Override
@@ -103,37 +115,42 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 			throw new IllegalStateException("index structure has not been initialized");
 		}
 
-		final SuffixData suffixData = SuffixArrays.createWithLCP(otherString, Algorithm.SAIS.getInstance());
-		final int[] lcp = suffixData.getLCP();
 		int longestMatchIndex = -1;
 		int longestMatchLength = 0;
 
-		int i = 0;
-		while (i < sequence.length()) {
-			int j = 0;
-			final int partialMatchIndex = i;
-			int partialMatchLength = 0;
-			while (j < otherString.length() && i < sequence.length()) {
-				if (sequence.charAt(i) == otherString.charAt(j)) {
-					i++;
-					j++;
-					partialMatchLength++;
-
-					if (partialMatchLength > longestMatchLength) {
-						longestMatchIndex = partialMatchIndex;
-						longestMatchLength = partialMatchLength;
+		if (otherString.length() >= minRelativeMatchLength) {
+			final String substring = otherString.substring(0, minRelativeMatchLength);
+			final List<Integer> indicesOfFirstChar = getIndicesFor(substring);
+			for (final Integer startIndex : indicesOfFirstChar) {
+				if (startIndex < sequence.length() - longestMatchLength) {
+					int i = startIndex;
+					int j = 0;
+					int localMatchLength = 0;
+					while (j < otherString.length() && i < sequence.length()) {
+						if (otherString.charAt(j) == sequence.charAt(i)) {
+							i++;
+							j++;
+							localMatchLength++;
+							if (localMatchLength > longestMatchLength) {
+								longestMatchIndex = startIndex;
+								longestMatchLength = localMatchLength;
+							}
+						} else {
+							break;
+						}
 					}
-				} else {
-					if (partialMatchLength > 1) {
-						i += partialMatchLength - lcp[partialMatchLength - 1];
-					} else {
-						i++;
-					}
-					break;
 				}
 			}
 		}
 
 		return new IndexAndLength(longestMatchIndex, longestMatchLength);
+	}
+
+	private List<Integer> getIndicesFor(final String substring) {
+		if (!stringToIndicesMap.containsKey(substring)) {
+			final List<Integer> indicesOfFirstChar = indicesOf(substring);
+			stringToIndicesMap.put(substring, indicesOfFirstChar);
+		}
+		return stringToIndicesMap.get(substring);
 	}
 }
