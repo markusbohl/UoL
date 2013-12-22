@@ -17,9 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import common.datastructure.ReferenceIndexStructure;
-import search.ApproximateSearchAlgorithm;
-import search.CompressedSequenceSearchAlgorithm;
 import search.entity.ReferencedSectionWithOffset;
 import search.entity.Section;
 import search.entity.SectionWithOffset;
@@ -29,7 +26,9 @@ import search.preparation.ReferenceFilter;
 import search.preparation.SectionsProvider;
 import search.preparation.SectionsProviderFactory;
 
-public class CompressedSequenceSearchAlgorithmTest {
+import common.datastructure.ReferenceIndexStructure;
+
+public abstract class ApproximateSearchAlgorithmTest {
 
 	private static final int ALLOWED_ERRORS = 2;
 	private static final String PATTERN = "pattern";
@@ -71,9 +70,13 @@ public class CompressedSequenceSearchAlgorithmTest {
 		when(referencedSection2.getContent()).thenReturn("content2");
 		when(referencedSection2.getOffset()).thenReturn(44);
 
-		algorithm = new CompressedSequenceSearchAlgorithm(approximateMatcher, sectionsProviderFactory,
-				neighborhoodIdentifier, referenceFilter);
+		algorithm = createAlgorithmToTest(approximateMatcher, sectionsProviderFactory, neighborhoodIdentifier,
+				referenceFilter);
 	}
+
+	protected abstract ApproximateSearchAlgorithm createAlgorithmToTest(ApproximateMatcher approximateMatcher,
+			SectionsProviderFactory sectionsProviderFactory, NeighborhoodIdentifier neighborhoodIdentifier,
+			ReferenceFilter referenceFilter);
 
 	@Test
 	public void createSectionsProviderForGivenPatternLength() {
