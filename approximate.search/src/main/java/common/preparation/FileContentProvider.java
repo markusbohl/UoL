@@ -3,15 +3,16 @@ package common.preparation;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.AssistedInject;
 
 public class FileContentProvider implements StringProvider {
 
 	private final String filePath;
 	private final BufferedFileReaderFactory bufferedFileReaderFactory;
 
-	@AssistedInject
+	@Inject
 	FileContentProvider(@Assisted final String filePath, final BufferedFileReaderFactory bufferedFileReaderFactory) {
 		this.filePath = filePath;
 		this.bufferedFileReaderFactory = bufferedFileReaderFactory;

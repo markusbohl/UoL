@@ -1,5 +1,7 @@
 package search;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -52,6 +54,8 @@ public class ConcurrentCompressedSequenceSearchAlgorithm extends AbstractCompres
 			}
 		}
 
+		System.out.println("matchingPositionsInSections found: "
+				+ SimpleDateFormat.getTimeInstance().format(new Date()));
 		return matchingPositions;
 	}
 }

@@ -1,5 +1,7 @@
 package search;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -36,22 +38,28 @@ public abstract class AbstractCompressedSequenceSearchAlgorithm implements Appro
 		final int patternLength = pattern.length();
 		final int minSectionLength = patternLength - allowedErrors;
 
+		System.out.println("createSectionsProvider: " + SimpleDateFormat.getTimeInstance().format(new Date()));
 		sectionsProvider = sectionsProviderFactory.createSectionsProviderFor(patternLength, allowedErrors);
-
+		System.out.println("sectionsProvider created: " + SimpleDateFormat.getTimeInstance().format(new Date()));
 		matchingPositions.addAll(matchesInRelativeMatchEntries(pattern, allowedErrors, minSectionLength));
+		System.out.println(SimpleDateFormat.getTimeInstance().format(new Date()));
 		matchingPositions.addAll(matchesInRawSections(pattern, allowedErrors));
+		System.out.println(SimpleDateFormat.getTimeInstance().format(new Date()));
 		matchingPositions.addAll(matchesInOverlappingAreas(pattern, allowedErrors));
-
+		System.out.println(SimpleDateFormat.getTimeInstance().format(new Date()));
 		return matchingPositions;
 	}
 
 	protected List<Integer> matchesInRelativeMatchEntries(final String pattern, final int allowedErrors,
 			final int minSectionLength) {
+		System.out.println("matchesInRelativeMatchEntries: " + SimpleDateFormat.getTimeInstance().format(new Date()));
 		final List<Section> neighborhoodAreas = neighborhoodIdentifier.identifiyAreasFor(pattern, allowedErrors);
+		System.out.println("neighborhoodAreas identified: " + SimpleDateFormat.getTimeInstance().format(new Date()));
 		final List<ReferencedSectionWithOffset> referencedSections = sectionsProvider.getRelativeMatchEntries();
+		System.out.println("referencedSections loaded: " + SimpleDateFormat.getTimeInstance().format(new Date()));
 		final List<ReferencedSectionWithOffset> filteredSections = referenceFilter.filter(referencedSections,
 				neighborhoodAreas, minSectionLength);
-
+		System.out.println("referencedSections filtered: " + SimpleDateFormat.getTimeInstance().format(new Date()));
 		return searchInSections(filteredSections, pattern, allowedErrors);
 	}
 
@@ -62,8 +70,9 @@ public abstract class AbstractCompressedSequenceSearchAlgorithm implements Appro
 	}
 
 	protected List<Integer> matchesInOverlappingAreas(final String pattern, final int allowedErrors) {
+		System.out.println("matchesInOverlappingAreas: " + SimpleDateFormat.getTimeInstance().format(new Date()));
 		final List<SectionWithOffset> overlappingAreas = sectionsProvider.getOverlappingAreas();
-
+		System.out.println("overlappingAreas loaded: " + SimpleDateFormat.getTimeInstance().format(new Date()));
 		return searchInSections(overlappingAreas, pattern, allowedErrors);
 	}
 

@@ -18,6 +18,6 @@ public class SearchModule extends AbstractModule {
 		install(new PreparationModule());
 		install(new DatastructureModule());
 		install(new ReferenceSequenceModule());
-		bind(ApproximateSearchAlgorithm.class).to(CompressedSequenceSearchAlgorithm.class);
+		bind(ApproximateSearchAlgorithm.class).to(ConcurrentCompressedSequenceSearchAlgorithm.class);
 	}
 }

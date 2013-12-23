@@ -7,7 +7,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
-
 import common.datastructure.ReferenceIndexStructure;
 import common.preparation.StringProvider;
 import common.preparation.StringProviderFactory;
@@ -21,14 +20,17 @@ public class Compress {
 		final String referenceSequence = getFastaContentFromFile(referenceFilePath, stringProviderFactory);
 		final ReferenceIndexStructure indexStructure = getReferenceIndexStructure(injector);
 		indexStructure.init(referenceSequence);
+		System.out.println("### index structure initialized ###");
 
 		final ReferentialCompressionAlgorithm compressionAlgorithm = getCompressionAlgorithm(injector);
 		final String sequenceToCompressFilePath = getSequenceToCompressFilePath(injector);
 		final String sequenceToCompress = getFastaContentFromFile(sequenceToCompressFilePath, stringProviderFactory);
 		final String compressedResult = compressionAlgorithm.compress(sequenceToCompress);
+		System.out.println("### sequence compressed ###");
 		final BufferedWriter bufferedWriter = getCompressedSequenceWriter(injector);
 		bufferedWriter.write(compressedResult);
 		bufferedWriter.close();
+		System.out.println("### compressed sequence stored ###");
 	}
 
 	private static StringProviderFactory getStringProviderFactory(final Injector injector) {

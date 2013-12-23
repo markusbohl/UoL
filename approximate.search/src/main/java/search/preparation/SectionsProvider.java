@@ -11,6 +11,7 @@ import search.entity.SectionWithOffset;
 
 import com.google.inject.assistedinject.Assisted;
 import common.preparation.StringProvider;
+import common.preparation.StringProviderFactory;
 
 public class SectionsProvider {
 
@@ -19,10 +20,12 @@ public class SectionsProvider {
 	private final List<ReferencedSectionWithOffset> relativeMatchEntries;
 
 	@Inject
-	SectionsProvider(@Named("compressed.sequence") final StringProvider stringProvider,
-			final CompressedSequenceParser parser, final OverlapBuilder overlapBuilder,
-			@Assisted("patternLength") final int patternLength, @Assisted("allowedErrors") final int allowedErrors) {
+	SectionsProvider(final StringProviderFactory stringProviderFactory,
+			@Named("compressed.sequence.file.path") final String filePath, final CompressedSequenceParser parser,
+			final OverlapBuilder overlapBuilder, @Assisted("patternLength") final int patternLength,
+			@Assisted("allowedErrors") final int allowedErrors) {
 
+		final StringProvider stringProvider = stringProviderFactory.createFromFile(filePath);
 		init(stringProvider, parser, overlapBuilder, patternLength, allowedErrors);
 
 		overlappingAreas = overlapBuilder.getOverlappingAreas();

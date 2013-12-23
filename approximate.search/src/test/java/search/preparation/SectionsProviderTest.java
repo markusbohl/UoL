@@ -17,17 +17,18 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import common.datastructure.ReferenceIndexStructure;
-import common.preparation.StringProvider;
 import search.entity.ReferenceSequenceSection;
 import search.entity.ReferencedSectionWithOffset;
 import search.entity.SectionWithOffset;
 import search.entity.SequenceSection;
-import search.preparation.CompressedSequenceParser;
-import search.preparation.OverlapBuilder;
-import search.preparation.SectionsProvider;
+
+import common.datastructure.ReferenceIndexStructure;
+import common.preparation.StringProvider;
+import common.preparation.StringProviderFactory;
 
 public class SectionsProviderTest {
+
+	private static final String FILE_PATH = "filePath";
 
 	private SectionsProvider sectionsProvider;
 
@@ -46,11 +47,13 @@ public class SectionsProviderTest {
 	@Mock
 	private CompressedSequenceParser parser;
 	@Mock
-	private StringProvider provider;
+	private StringProvider stringProvider;
 	@Mock
 	private OverlapBuilder overlapBuilder;
 	@Mock
 	private ReferenceIndexStructure indexStructure;
+	@Mock
+	private StringProviderFactory stringProviderFactory;
 
 	@Before
 	public void setUp() throws Exception {
@@ -63,13 +66,15 @@ public class SectionsProviderTest {
 		overlappingArea = new SequenceSection(8, "AGACGGTT");
 		sequenceSections = Arrays.asList(refSeqSection, seqSection);
 
-		when(provider.toString()).thenReturn("RM(2,10)R(ATAGAC");
+		when(stringProviderFactory.createFromFile(FILE_PATH)).thenReturn(stringProvider);
+		when(stringProvider.toString()).thenReturn("RM(2,10)R(ATAGAC");
 		when(parser.getAllEntries()).thenReturn(sequenceSections);
 		when(parser.getRawEntries()).thenReturn(Arrays.asList(seqSection));
 		when(parser.getRelativeMatchEntries()).thenReturn(Arrays.asList(refSeqSection));
 		when(overlapBuilder.getOverlappingAreas()).thenReturn(Arrays.asList(overlappingArea));
 
-		sectionsProvider = new SectionsProvider(provider, parser, overlapBuilder, patternLength, allowedErrors);
+		sectionsProvider = new SectionsProvider(stringProviderFactory, FILE_PATH, parser, overlapBuilder,
+				patternLength, allowedErrors);
 	}
 
 	@Test
@@ -90,8 +95,8 @@ public class SectionsProviderTest {
 	@Test
 	public void getEmptyListWhenRawSectionsFullyIncludedInOverlapAreas() {
 		when(overlapBuilder.rawSectionsFullyIncluded()).thenReturn(true);
-		final SectionsProvider secProvider = new SectionsProvider(provider, parser, overlapBuilder, patternLength,
-				allowedErrors);
+		final SectionsProvider secProvider = new SectionsProvider(stringProviderFactory, FILE_PATH, parser,
+				overlapBuilder, patternLength, allowedErrors);
 
 		final List<SectionWithOffset> rawEntries = secProvider.getRawEntries();
 

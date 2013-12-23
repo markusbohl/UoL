@@ -11,7 +11,7 @@ public class MatcherModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(new TypeLiteral<Set<Character>>() {
-		}).toInstance(ImmutableSet.of('A', 'C', 'G', 'T'));
-		bind(ApproximateMatcher.class).to(BitParallelMatrixBasedMatcher.class);
+		}).toInstance(ImmutableSet.of('A', 'C', 'G', 'T', 'N'));
+		bind(ApproximateMatcher.class).to(BitParallelMatrixBasedMatcher.class).asEagerSingleton();
 	}
 }
