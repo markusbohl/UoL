@@ -41,7 +41,11 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 		int err = pattern.length();
 
 		for (int i = 0; i < text.length(); i++) {
-			long x = b[charToIndexMap.get(text.charAt(i))] | vn;
+			final Integer index = charToIndexMap.get(text.charAt(i));
+			if (index == null) {
+				continue;
+			}
+			long x = b[index] | vn;
 			final long d0 = ((vp + (x & vp)) ^ vp) | x;
 			final long hn = vp & d0;
 			final long hp = vn | ~(vp | d0);
@@ -66,8 +70,11 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 
 		for (int i = 0; i < pattern.length(); i++) {
 			final char currentChar = pattern.charAt(i);
-			final int currentIndex = charToIndexMap.get(currentChar);
+			final Integer currentIndex = charToIndexMap.get(currentChar);
 
+			if (currentIndex == null) {
+				continue;
+			}
 			b[currentIndex] = b[currentIndex] | (_0B1 << i);
 		}
 

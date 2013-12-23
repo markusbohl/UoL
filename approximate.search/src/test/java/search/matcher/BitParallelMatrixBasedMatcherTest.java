@@ -1,9 +1,11 @@
 package search.matcher;
 
 import static junitparams.JUnitParamsRunner.$;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -15,9 +17,6 @@ import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import search.matcher.ApproximateMatcher;
-import search.matcher.BitParallelMatrixBasedMatcher;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -54,6 +53,17 @@ public class BitParallelMatrixBasedMatcherTest {
 	@Parameters({ "0,4", "5,9", "10,14" })
 	public void mindOffsetOfMatches(final int offset, final int expectedPosition) {
 		assertThat(matcher.search("NNAAANN", "AAA", 0, offset), hasItem(expectedPosition));
+	}
 
+	@Test
+	public void doNotThrowExceptionWhenTextContainsNonAllowedCharacter() {
+		final List<Integer> result = matcher.search("<", "N", 1, 0);
+		assertThat(result, is(empty()));
+	}
+
+	@Test
+	public void doNotThrowExceptionWhenPatternContainsNonAllowedCharacter() {
+		final List<Integer> result = matcher.search("N", "<", 0, 0);
+		assertThat(result, is(empty()));
 	}
 }
