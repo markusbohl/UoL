@@ -10,9 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import search.preparation.NonOverlappingPartitioner;
-import search.preparation.Partitioner;
-
 @RunWith(JUnitParamsRunner.class)
 public class NonOverlappingPartitionerTest {
 
@@ -25,12 +22,15 @@ public class NonOverlappingPartitionerTest {
 
 	@Test
 	@Parameters
-	public void partition(final String string, final int length, final String[] parts) {
-		assertThat(partitioner.partition(string, length), arrayContaining(parts));
+	public void partition(final String string, final int noOfParts, final String[] expectedParts) {
+		final String[] actualParts = partitioner.partition(string, noOfParts);
+
+		assertThat(actualParts, arrayContaining(expectedParts));
 	}
 
 	Object parametersForPartition() {
-		return $($("abcdef", 2, new String[] { "abc", "def" }), //
+		return $($("abcdef", 1, new String[] { "abcdef" }), //
+				$("abcdef", 2, new String[] { "abc", "def" }), //
 				$("abcdefg", 2, new String[] { "abc", "defg" }), //
 				$("abcdef", 3, new String[] { "ab", "cd", "ef" }), //
 				$("abcdefg", 3, new String[] { "ab", "cd", "efg" }));
