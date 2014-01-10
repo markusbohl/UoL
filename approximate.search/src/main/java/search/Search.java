@@ -26,7 +26,7 @@ public class Search {
 		final ApproximateSearchAlgorithm algorithm = injector.getInstance(ApproximateSearchAlgorithm.class);
 		final Integer allowedErrors = injector.getInstance(Key.get(Integer.class, Names.named("allowed.errors")));
 		System.out.println("### begin search ###");
-		final Set<Integer> results = algorithm.search("ACTAGATGATCAAATTTATGTCATTGTTATAGCCTATGCATTTGTCA", allowedErrors);
+		final Set<Integer> results = algorithm.search("ACTAGATGATCAAATTTA", allowedErrors);
 		log(results);
 	}
 

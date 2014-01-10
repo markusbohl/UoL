@@ -16,9 +16,7 @@ import java.util.TreeSet;
  * >https://github.com/phishman3579/java-algorithms-implementation</a>
  * <p>
  * The changes include the implementation of an <code>indicesOf(C)</code> method which returns all indices at which a
- * given {@link CharSequence} can be found in the sequence the suffix tree has been created for. Moreover, the static
- * <code>key(int, char)</code> has been adapted so that the tree works for <code>CharSequence</code>s with more than 32
- * chars.
+ * given {@link CharSequence} can be found in the sequence the suffix tree has been created for.
  */
 public class SuffixTree<C extends CharSequence> {
 
