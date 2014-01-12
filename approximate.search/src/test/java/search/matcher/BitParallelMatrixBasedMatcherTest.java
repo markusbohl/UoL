@@ -36,6 +36,7 @@ public class BitParallelMatrixBasedMatcherTest {
 	@Parameters
 	public void findMatches(final String text, final String pattern, final int allowedErrors,
 			final Integer[] expectedPositions) {
+		matcher.init(pattern, allowedErrors);
 		final List<Integer> actualPositions = matcher.search(text, pattern, allowedErrors, 0);
 
 		assertThat(actualPositions, hasSize(expectedPositions.length));
@@ -52,18 +53,32 @@ public class BitParallelMatrixBasedMatcherTest {
 	@Test
 	@Parameters({ "0,4", "5,9", "10,14" })
 	public void mindOffsetOfMatches(final int offset, final int expectedPosition) {
-		assertThat(matcher.search("NNAAANN", "AAA", 0, offset), hasItem(expectedPosition));
+		final String pattern = "AAA";
+		final int allowedErrors = 0;
+		matcher.init(pattern, allowedErrors);
+
+		assertThat(matcher.search("NNAAANN", pattern, allowedErrors, offset), hasItem(expectedPosition));
 	}
 
 	@Test
 	public void doNotThrowExceptionWhenTextContainsNonAllowedCharacter() {
-		final List<Integer> result = matcher.search("<", "N", 1, 0);
+		final String pattern = "N";
+		final int allowedErrors = 1;
+		matcher.init(pattern, allowedErrors);
+
+		final List<Integer> result = matcher.search("<", pattern, allowedErrors, 0);
+
 		assertThat(result, is(empty()));
 	}
 
 	@Test
 	public void doNotThrowExceptionWhenPatternContainsNonAllowedCharacter() {
-		final List<Integer> result = matcher.search("N", "<", 0, 0);
+		final String pattern = "<";
+		final int allowedErrors = 0;
+		matcher.init(pattern, allowedErrors);
+
+		final List<Integer> result = matcher.search("N", pattern, allowedErrors, 0);
+
 		assertThat(result, is(empty()));
 	}
 }

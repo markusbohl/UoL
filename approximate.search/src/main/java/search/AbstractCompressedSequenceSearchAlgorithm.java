@@ -33,13 +33,15 @@ public abstract class AbstractCompressedSequenceSearchAlgorithm implements Appro
 	@Override
 	public Set<Integer> search(final String pattern, final int allowedErrors) {
 		final SortedSet<Integer> matchingPositions = new TreeSet<>();
-		final int patternLength = pattern.length();
 
+		final int patternLength = pattern.length();
 		final SectionsProvider sectionsProvider = sectionsProviderFactory.createFor(patternLength, allowedErrors);
 		final List<SectionWithOffset> rawEntries = rawEntries(sectionsProvider);
 		final List<SectionWithOffset> overlappingAreas = overlappingAreas(sectionsProvider);
 		final List<ReferencedSectionWithOffset> relEntries = relEntries(sectionsProvider);
 		final List<ReferencedSectionWithOffset> preparedRelEntries = prepare(relEntries, pattern, allowedErrors);
+
+		approximateMatcher.init(pattern, allowedErrors);
 
 		matchingPositions.addAll(matchesIn(preparedRelEntries, pattern, allowedErrors));
 		matchingPositions.addAll(matchesIn(rawEntries, pattern, allowedErrors));

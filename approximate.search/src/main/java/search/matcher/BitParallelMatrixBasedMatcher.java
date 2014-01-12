@@ -13,6 +13,7 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 	private static final long _0B1 = 0b1;
 	private final Set<Character> alphabet;
 	private final Map<Character, Integer> charToIndexMap;
+	private long[] patternBitmasks;
 
 	@Inject
 	BitParallelMatrixBasedMatcher(final Set<Character> alphabet) {
@@ -33,9 +34,25 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 	}
 
 	@Override
+	public void init(final String pattern, final int allowedErrors) {
+		final long[] b = new long[alphabet.size()];
+
+		for (int i = 0; i < pattern.length(); i++) {
+			final char currentChar = pattern.charAt(i);
+			final Integer currentIndex = charToIndexMap.get(currentChar);
+
+			if (currentIndex == null) {
+				continue;
+			}
+			b[currentIndex] = b[currentIndex] | (_0B1 << i);
+		}
+		patternBitmasks = b;
+	}
+
+	@Override
 	public List<Integer> search(final String text, final String pattern, final int allowedErrors, final int offset) {
 		final LinkedList<Integer> matchingPositions = new LinkedList<>();
-		final long[] b = initPatternBitmasks(pattern);
+
 		long vp = ~0L;
 		long vn = 0L;
 		int err = pattern.length();
@@ -45,7 +62,7 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 			if (index == null) {
 				continue;
 			}
-			long x = b[index] | vn;
+			long x = patternBitmasks[index] | vn;
 			final long d0 = ((vp + (x & vp)) ^ vp) | x;
 			final long hn = vp & d0;
 			final long hp = vn | ~(vp | d0);
@@ -63,21 +80,5 @@ public class BitParallelMatrixBasedMatcher implements ApproximateMatcher {
 		}
 
 		return matchingPositions;
-	}
-
-	private long[] initPatternBitmasks(final String pattern) {
-		final long[] b = new long[alphabet.size()];
-
-		for (int i = 0; i < pattern.length(); i++) {
-			final char currentChar = pattern.charAt(i);
-			final Integer currentIndex = charToIndexMap.get(currentChar);
-
-			if (currentIndex == null) {
-				continue;
-			}
-			b[currentIndex] = b[currentIndex] | (_0B1 << i);
-		}
-
-		return b;
 	}
 }

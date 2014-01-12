@@ -22,7 +22,7 @@ import search.matcher.ApproximateMatcher;
 import search.preparation.SectionsProvider;
 import search.preparation.SectionsProviderFactory;
 
-public abstract class ApproximateSearchAlgorithmTest {
+public class ApproximateSearchAlgorithmTest {
 
 	private static final int ALLOWED_ERRORS = 2;
 	private static final String PATTERN = "pattern";
@@ -50,6 +50,13 @@ public abstract class ApproximateSearchAlgorithmTest {
 		when(section2.getOffset()).thenReturn(44);
 
 		algorithm = algorithm();
+	}
+
+	@Test
+	public void initApproximateMatcher() {
+		algorithm.search(PATTERN, ALLOWED_ERRORS);
+
+		verify(approximateMatcher).init(PATTERN, ALLOWED_ERRORS);
 	}
 
 	@Test
@@ -90,8 +97,7 @@ public abstract class ApproximateSearchAlgorithmTest {
 			protected List<ReferencedSectionWithOffset> prepare(
 					final List<ReferencedSectionWithOffset> relMatchEntries, final String pattern,
 					final int allowedErrors) {
-				// not relevant to test in this class
-				return null;
+				return relMatchEntries;
 			}
 		};
 	}
