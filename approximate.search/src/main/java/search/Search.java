@@ -1,7 +1,5 @@
 package search;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Set;
 
 import com.google.inject.Guice;
@@ -21,11 +19,9 @@ public class Search {
 		final String referenceSequence = getFastaContentFromFile(referenceFilePath, stringProviderFactory);
 		final ReferenceIndexStructure indexStructure = getReferenceIndexStructure(injector);
 		indexStructure.init(referenceSequence);
-		System.out.println("### index structure initialized ###");
 
 		final ApproximateSearchAlgorithm algorithm = injector.getInstance(ApproximateSearchAlgorithm.class);
 		final Integer allowedErrors = injector.getInstance(Key.get(Integer.class, Names.named("allowed.errors")));
-		System.out.println("### begin search ###");
 		final Set<Integer> results = algorithm.search("ACTAGATGATCAAATTTA", allowedErrors);
 		log(results);
 	}
@@ -50,10 +46,8 @@ public class Search {
 	}
 
 	private static void log(final Set<Integer> results) {
-		System.out.println("### results ###");
 		for (final Integer integer : results) {
 			System.out.println(integer);
 		}
-		System.out.println(SimpleDateFormat.getTimeInstance().format(new Date()));
 	}
 }
