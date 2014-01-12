@@ -14,31 +14,22 @@ public class Search {
 
 	public static void main(final String[] args) {
 		final Injector injector = Guice.createInjector(new SearchModule());
-		final StringProviderFactory stringProviderFactory = getStringProviderFactory(injector);
-		final String referenceFilePath = getReferenceFilePath(injector);
-		final String referenceSequence = getFastaContentFromFile(referenceFilePath, stringProviderFactory);
+		final String referenceSequence = loadReferenceSequence(injector);
 		final ReferenceIndexStructure indexStructure = getReferenceIndexStructure(injector);
 		indexStructure.init(referenceSequence);
 
 		final ApproximateSearchAlgorithm algorithm = injector.getInstance(ApproximateSearchAlgorithm.class);
-		final Integer allowedErrors = injector.getInstance(Key.get(Integer.class, Names.named("allowed.errors")));
-		final Set<Integer> results = algorithm.search("ACTAGATGATCAAATTTA", allowedErrors);
+		final Set<Integer> results = algorithm.search("ACTAGATGATCAAATTTA", 2);
 		log(results);
 	}
 
-	private static StringProviderFactory getStringProviderFactory(final Injector injector) {
-		return injector.getInstance(StringProviderFactory.class);
-	}
-
-	private static String getFastaContentFromFile(final String referenceFilePath,
-			final StringProviderFactory stringProviderFactory) {
+	private static String loadReferenceSequence(final Injector injector) {
+		final StringProviderFactory stringProviderFactory = injector.getInstance(StringProviderFactory.class);
+		final String referenceFilePath = injector.getInstance(Key.get(String.class,
+				Names.named("reference.sequence.file.path")));
 		final StringProvider referenceSequenceProvider = stringProviderFactory.createFromFastaFile(referenceFilePath);
 
 		return referenceSequenceProvider.toString();
-	}
-
-	private static String getReferenceFilePath(final Injector injector) {
-		return injector.getInstance(Key.get(String.class, Names.named("reference.sequence.file.path")));
 	}
 
 	private static ReferenceIndexStructure getReferenceIndexStructure(final Injector injector) {
