@@ -20,18 +20,18 @@ public class Rme1SearchAlgorithm extends AbstractCompressedSequenceSearchAlgorit
 	Rme1SearchAlgorithm(final SectionsProviderFactory sectionsProviderFactory,
 			final NeighborhoodIdentifier neighborhoodIdentifier, final ReferenceFilter referenceFilter,
 			final ApproximateMatcher approximateMatcher) {
-		super(sectionsProviderFactory, approximateMatcher, neighborhoodIdentifier, referenceFilter);
+		super(sectionsProviderFactory, approximateMatcher);
 		this.neighborhoodIdentifier = neighborhoodIdentifier;
 		this.referenceFilter = referenceFilter;
 	}
 
 	@Override
-	protected List<Integer> matchesInRelativeMatchEntries(final String pattern, final int allowedErrors,
-			final int minSectionLength) {
-		final List<ReferencedSectionWithOffset> referencedSections = sectionsProvider.getRelativeMatchEntries();
+	protected List<ReferencedSectionWithOffset> prepare(final List<ReferencedSectionWithOffset> relMatchEntries,
+			final String pattern, final int allowedErrors) {
 		final List<Section> neighborhoodAreas = neighborhoodIdentifier.identifiyAreasFor(pattern, allowedErrors);
-		final List<ReferencedSectionWithOffset> filteredSections = referenceFilter.filter(referencedSections,
-				neighborhoodAreas, minSectionLength);
-		return searchInSections(filteredSections, pattern, allowedErrors);
+		final int patternLength = pattern.length();
+		final int minSectionLength = patternLength - allowedErrors;
+
+		return referenceFilter.filter(relMatchEntries, neighborhoodAreas, minSectionLength);
 	}
 }
