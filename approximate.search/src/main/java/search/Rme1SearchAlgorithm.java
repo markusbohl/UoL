@@ -29,9 +29,12 @@ public class Rme1SearchAlgorithm extends AbstractCompressedSequenceSearchAlgorit
 	protected List<ReferencedSectionWithOffset> prepare(final List<ReferencedSectionWithOffset> relMatchEntries,
 			final String pattern, final int allowedErrors) {
 		final List<Section> neighborhoodAreas = neighborhoodIdentifier.identifiyAreasFor(pattern, allowedErrors);
+		System.out.println("neighborhoodAreas: " + neighborhoodAreas.size());
 		final int patternLength = pattern.length();
 		final int minSectionLength = patternLength - allowedErrors;
-
-		return referenceFilter.filter(relMatchEntries, neighborhoodAreas, minSectionLength);
+		final List<ReferencedSectionWithOffset> filteredSections = referenceFilter.filter(relMatchEntries,
+				neighborhoodAreas, minSectionLength);
+		System.out.println("filteredSections: " + filteredSections.size());
+		return filteredSections;
 	}
 }

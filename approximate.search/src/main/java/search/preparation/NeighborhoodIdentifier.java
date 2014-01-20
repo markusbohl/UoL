@@ -2,12 +2,13 @@ package search.preparation;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
-import common.datastructure.ReferenceIndexStructure;
-
 import search.entity.Section;
+
+import common.datastructure.ReferenceIndexStructure;
 
 public class NeighborhoodIdentifier {
 
@@ -29,7 +30,7 @@ public class NeighborhoodIdentifier {
 		for (int i = 0; i < subpatterns.length; i++) {
 			final String subpattern = subpatterns[i];
 			final int subpatternLength = subpattern.length();
-			final List<Integer> indicesOfSubpattern = indexStructure.indicesOf(subpattern);
+			final Set<Integer> indicesOfSubpattern = indexStructure.indicesOf(subpattern);
 
 			for (final Integer index : indicesOfSubpattern) {
 				if (i == 0) {

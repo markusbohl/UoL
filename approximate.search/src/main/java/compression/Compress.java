@@ -2,6 +2,8 @@ package compression;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -19,7 +21,11 @@ public class Compress {
 		final String referenceFilePath = getReferenceFilePath(injector);
 		final String referenceSequence = getFastaContentFromFile(referenceFilePath, stringProviderFactory);
 		final ReferenceIndexStructure indexStructure = getReferenceIndexStructure(injector);
+		System.out.println("begin to init index structure: "
+				+ DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG).format(new Date()));
 		indexStructure.init(referenceSequence);
+		System.out.println("index structure initialized: "
+				+ DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG).format(new Date()));
 
 		final ReferentialCompressionAlgorithm compressionAlgorithm = getCompressionAlgorithm(injector);
 		final String sequenceToCompressFilePath = getSequenceToCompressFilePath(injector);
@@ -27,6 +33,8 @@ public class Compress {
 		final String compressedResult = compressionAlgorithm.compress(sequenceToCompress);
 		final BufferedWriter bufferedWriter = getCompressedSequenceWriter(injector);
 		bufferedWriter.write(compressedResult);
+		System.out.println("sequenced compressed: "
+				+ DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG).format(new Date()));
 		bufferedWriter.close();
 	}
 

@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.util.List;
+import java.util.Set;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -48,7 +48,7 @@ public abstract class ReferenceIndexStructureTest {
 	public void indicesOf(final String sequence, final String query, final Integer[] indices) {
 		indexStructure.init(sequence);
 
-		final List<Integer> result = indexStructure.indicesOf(query);
+		final Set<Integer> result = indexStructure.indicesOf(query);
 
 		assertThat(result, hasSize(indices.length));
 		assertThat(result, hasItems(indices));

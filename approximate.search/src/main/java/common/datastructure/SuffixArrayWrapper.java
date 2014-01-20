@@ -3,7 +3,9 @@ package common.datastructure;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -15,7 +17,7 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 
 	private String sequence;
 	private int[] suffixArray;
-	private Map<String, List<Integer>> stringToIndicesMap;
+	private Map<String, Set<Integer>> stringToIndicesMap;
 	private final int minRelativeMatchLength;
 
 	@Inject
@@ -35,7 +37,7 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 	}
 
 	@Override
-	public List<Integer> indicesOf(final String substring) {
+	public Set<Integer> indicesOf(final String substring) {
 		if (sequence == null) {
 			throw new IllegalStateException("index structure has not been initialized");
 		}
@@ -43,8 +45,8 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 		return indicesOf(substring, 0, suffixArray.length);
 	}
 
-	private List<Integer> indicesOf(final String query, final int min, final int max) {
-		final List<Integer> indices = new LinkedList<>();
+	private Set<Integer> indicesOf(final String query, final int min, final int max) {
+		final Set<Integer> indices = new TreeSet<>();
 
 		if (min <= max && min < suffixArray.length) {
 			final int midpoint = midpoint(min, max);
@@ -120,7 +122,7 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 
 		if (otherString.length() >= minRelativeMatchLength) {
 			final String substring = otherString.substring(0, minRelativeMatchLength);
-			final List<Integer> indicesOfFirstChar = getIndicesFor(substring);
+			final Set<Integer> indicesOfFirstChar = getIndicesFor(substring);
 			for (final Integer startIndex : indicesOfFirstChar) {
 				if (startIndex < sequence.length() - longestMatchLength) {
 					int i = startIndex;
@@ -146,9 +148,9 @@ public class SuffixArrayWrapper implements ReferenceIndexStructure {
 		return new IndexAndLength(longestMatchIndex, longestMatchLength);
 	}
 
-	private List<Integer> getIndicesFor(final String substring) {
+	private Set<Integer> getIndicesFor(final String substring) {
 		if (!stringToIndicesMap.containsKey(substring)) {
-			final List<Integer> indicesOfFirstChar = indicesOf(substring);
+			final Set<Integer> indicesOfFirstChar = indicesOf(substring);
 			stringToIndicesMap.put(substring, indicesOfFirstChar);
 		}
 		return stringToIndicesMap.get(substring);

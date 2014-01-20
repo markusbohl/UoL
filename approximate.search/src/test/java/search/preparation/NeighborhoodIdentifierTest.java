@@ -6,18 +6,17 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import common.datastructure.ReferenceIndexStructure;
-
 import search.entity.Section;
-import search.preparation.NeighborhoodIdentifier;
-import search.preparation.Partitioner;
+
+import common.datastructure.ReferenceIndexStructure;
 
 public class NeighborhoodIdentifierTest {
 
@@ -42,7 +41,7 @@ public class NeighborhoodIdentifierTest {
 
 	@Test
 	public void determineNeighborhoodForFirstSubpattern() {
-		when(indexStructure.indicesOf("pa")).thenReturn(Arrays.asList(0, 10));
+		when(indexStructure.indicesOf("pa")).thenReturn(asSet(0, 10));
 
 		final List<Section> neighberhoodAreas = neighborhoodIdentifier.identifiyAreasFor(PATTERN, ALLOWED_ERRORS);
 
@@ -55,7 +54,7 @@ public class NeighborhoodIdentifierTest {
 
 	@Test
 	public void determineNeighborhoodAreaForMiddleSubpattern() {
-		when(indexStructure.indicesOf("tt")).thenReturn(Arrays.asList(0, 4, 10));
+		when(indexStructure.indicesOf("tt")).thenReturn(asSet(0, 4, 10));
 
 		final List<Section> neighberhoodAreas = neighborhoodIdentifier.identifiyAreasFor(PATTERN, ALLOWED_ERRORS);
 
@@ -70,7 +69,7 @@ public class NeighborhoodIdentifierTest {
 
 	@Test
 	public void determineNeighborhoodAreaForLastSubpattern() {
-		when(indexStructure.indicesOf("ern")).thenReturn(Arrays.asList(0, 1, 2, 3, 10));
+		when(indexStructure.indicesOf("ern")).thenReturn(asSet(0, 1, 2, 3, 10));
 
 		final List<Section> neighberhoodAreas = neighborhoodIdentifier.identifiyAreasFor(PATTERN, ALLOWED_ERRORS);
 
@@ -81,5 +80,13 @@ public class NeighborhoodIdentifierTest {
 		assertThat(neighberhoodAreas.get(1).getEndIndex(), is(7));
 		assertThat(neighberhoodAreas.get(2).getStartIndex(), is(4));
 		assertThat(neighberhoodAreas.get(2).getEndIndex(), is(15));
+	}
+
+	private static Set<Integer> asSet(final Integer... values) {
+		final TreeSet<Integer> set = new TreeSet<>();
+		for (final Integer integer : values) {
+			set.add(integer);
+		}
+		return set;
 	}
 }

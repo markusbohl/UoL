@@ -12,11 +12,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.carrotsearch</groupId>
-			<artifactId>jsuffixarrays</artifactId>
-			<version>0.2.0</version>
-		</dependency>
-		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 			<version>3.0</version>
@@ -30,6 +25,20 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>15.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.carrotsearch</groupId>
+			<artifactId>jsuffixarrays</artifactId>
+			<version>0.2.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/repo/jsuffixarrays-0.2.0.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.blogspot.illyakeeplearning</groupId>
+			<artifactId>suffixtree</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/repo/com.blogspot.illyakeeplearning.suffixtree.jar</systemPath>
 		</dependency>
 
 		<!-- test dependencies -->

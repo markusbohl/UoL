@@ -1,5 +1,7 @@
 package search;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Set;
 
 import com.google.inject.Guice;
@@ -11,6 +13,9 @@ import common.preparation.StringProvider;
 import common.preparation.StringProviderFactory;
 
 public class Search {
+
+	private static final DateFormat DATE_TIME_INSTANCE = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+			DateFormat.LONG);
 
 	/**
 	 * Arguments:<br>
@@ -27,6 +32,7 @@ public class Search {
 	 * </ul>
 	 */
 	public static void main(final String[] args) {
+		logWithTimeStamp("start");
 		if (args.length != 6) {
 			throw new IllegalArgumentException("application parameters missing or incomplete");
 		}
@@ -34,14 +40,19 @@ public class Search {
 		final String allowedErrors = read("-k", args);
 		final Integer variant = Integer.valueOf(read("-a", args));
 
+		System.out.println("-p " + pattern + " -k " + allowedErrors + " -a " + variant);
+
 		final Injector injector = Guice.createInjector(new SearchModule(AlgorithmVariant.get(variant)));
 		final String referenceSequence = loadReferenceSequence(injector);
 		final ReferenceIndexStructure indexStructure = getReferenceIndexStructure(injector);
+		logWithTimeStamp("start init ref sequence");
 		indexStructure.init(referenceSequence);
+		logWithTimeStamp("init ref sequence finished");
 
 		final ApproximateSearchAlgorithm algorithm = injector.getInstance(ApproximateSearchAlgorithm.class);
 		final Set<Integer> results = algorithm.search(pattern, Integer.valueOf(allowedErrors));
 		log(results);
+		logWithTimeStamp("finish");
 	}
 
 	private static String read(final String argument, final String[] args) {
@@ -70,5 +81,9 @@ public class Search {
 		for (final Integer integer : results) {
 			System.out.println(integer);
 		}
+	}
+
+	public static void logWithTimeStamp(final String message) {
+		System.out.println(message + ": " + DATE_TIME_INSTANCE.format(new Date()));
 	}
 }

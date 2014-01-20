@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import search.Search;
 import search.entity.ReferencedSectionWithOffset;
 import search.entity.SectionWithOffset;
 
@@ -36,7 +37,9 @@ public class SectionsProvider {
 	private void init(final StringProvider provider, final CompressedSequenceParser parser,
 			final OverlapBuilder overlapBuilder, final int patternLength, final int allowedErrors) {
 		parser.parse(provider.toString());
+		Search.logWithTimeStamp("start building overlapping areas");
 		overlapBuilder.feed(parser.getAllEntries(), patternLength, allowedErrors);
+		Search.logWithTimeStamp("building overlapping areas finished");
 	}
 
 	private List<SectionWithOffset> determineRawEntries(final CompressedSequenceParser parser,

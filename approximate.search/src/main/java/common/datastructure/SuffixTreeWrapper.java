@@ -1,13 +1,13 @@
 package common.datastructure;
 
-import java.util.List;
+import java.util.Set;
 
-import common.datastructure.SuffixTree.Match;
+import com.blogspot.illyakeeplearning.suffixtree.SuffixTree;
 
 public class SuffixTreeWrapper implements ReferenceIndexStructure {
 
 	private String string;
-	private SuffixTree<String> suffixTree;
+	private SuffixTree suffixTree;
 
 	@Override
 	public void init(final String sequence) {
@@ -15,11 +15,11 @@ public class SuffixTreeWrapper implements ReferenceIndexStructure {
 			throw new IllegalArgumentException("sequence must not be null");
 		}
 		string = sequence;
-		suffixTree = new SuffixTree<>(sequence);
+		suffixTree = new SuffixTree(sequence + "$");
 	}
 
 	@Override
-	public List<Integer> indicesOf(final String substring) {
+	public Set<Integer> indicesOf(final String substring) {
 		if (suffixTree == null) {
 			throw new IllegalStateException("index structure has not been initialized");
 		}
@@ -36,12 +36,6 @@ public class SuffixTreeWrapper implements ReferenceIndexStructure {
 
 	@Override
 	public HasIndexAndLength findLongestPrefixSuffixMatch(final String otherString) {
-		if (suffixTree == null) {
-			throw new IllegalStateException("index structure has not been initialized");
-		}
-
-		final Match longestCommonSubString = suffixTree.findLongestCommonSubString(otherString);
-
-		return new IndexAndLength(longestCommonSubString.getIndex(), longestCommonSubString.getLength());
+		throw new UnsupportedOperationException();
 	}
 }
